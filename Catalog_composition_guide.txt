@@ -1,0 +1,31 @@
+###
+This guide helps fetching all events when reprocessing them from zero.
+###
+
+
+General events: use --mode fdsn
+
+Special periods: 
+1) flipped polarity: 
+   need to multiply RLAS or AC with (-1) to get rid of it (don't know where its coming from).
+   - 2007-09-14 - 2007-09-25
+   - 2007-12-16 - 2007-12-26T23:00
+   - 2008-02-21 - 2008-03-15
+   - 2008-05-07 - 2008-06-10
+
+2) Additional events from other catalogs:
+   events from Poland and other close events that do not appear in the GCMT catalog.
+   Use .xml files! --> --mode qmlfile
+   But reduce the shift len from 100 to 50!
+   - preferred: use extra_events.xml which contains all the events of the other xml-files --> may not work 210 is not enough
+   (- for the France event 2016-04-28: france_event_20160428.xml
+    - for Poland events: poland_events_qml.xml
+    - for other larger closeby events: 500kmradius_events_qml.xml)
+
+3) GPS-clock drift events from 2012, 2013, 2014: See clock_drifts.png!
+   Use the other seismometer 'Lennartz' which is less sensitive, but uses the same GPS as G-ring.
+   Change net_s to 'BW', sta_s to 'WETR'
+   Estimated periods:
+   - 2014-05-01 - 2014-11-15
+   - 2013-07-10 - 2013-09-01
+   - 2012-03-15 - 2012-05-05
