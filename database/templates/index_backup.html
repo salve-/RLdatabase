@@ -1,0 +1,195 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    
+
+    <!-- <h3><span style="padding-left:160px">Query parameters:</h3>     -->
+    {% from "_formhelpers.html" import render_field %}
+    <p>
+        <center>
+        <b>Start time </b><span style="padding-left:20px"> <input size="14" type="text" name="start" value="2011-01-01T00:00">
+        <span style="padding-left:30px">
+        <b>Min. magnitude </b> <span style="padding-left:10px"><input size="2" type="text" name="minmag" value="8.5"></center> 
+        <center>
+        <b>End time</b><span style="padding-left:34px"> <input size="14" type="text" name="end" value="2015-10-15T00:00">
+        <span style="padding-left:30px"> 
+        <b>Max. magnitude </b><span style="padding-left:5px"><input size="2" type="text" name="maxmag" value="9.5"></center>
+        <center>
+        <span style="padding-right:110px"><font color="Grey" size=2>YYYY<b>-</b>mm<b>-</b>dd<b>T</b>HH<b>:</b>MM</font> </center><br>
+        <center>
+        <span style="padding-right:314px">
+        <b>Latitude/Longitude:</b></center>
+        <center>
+        <b>North</b><br> <input size="5" type="text" name="maxlat" value="90.0"></center>
+        <center>
+        <span style="padding-right:9px">
+        <b>West</b> <input size="5" type="text" name="minlon" value="-180.0">
+        <span style="padding-left:60px"><input size="5" type="text" name="maxlon" value="180.0"> <b>East</b></center>
+        <center>
+        <input size="5" type="text" name="minlat" value="-90.0"><br>
+        <b>South</b>
+        </center>
+        <!-- <span id="result">?</span> -->
+    <p><center><span style="padding-left:410px">  <a href=# id="calculate"><mybutton type="mybutton"><b>search</b></mybutton></a> </center><br>
+    <div id="map"></div>
+    <script type="text/javascript">
+        var markers
+
+        function onEachFeature(feature, layer) {
+
+            var container = $('<div />');
+            var date = feature.properties.time.substring(0,10);
+            var time = feature.properties.time.substring(11,16);
+            var magnitude = feature.properties.magnitude;
+            // var region = feature.properties.region;
+            var depth = feature.properties.depth;
+            var link1 = feature.properties.page1_URL.slice(53);
+            var link2 = feature.properties.page2_URL.slice(53);
+            var link3 = feature.properties.page3_URL.slice(53);
+            var link4 = feature.properties.page4_URL.slice(53);
+            var json = feature.properties.page4_URL.slice(53,-11) + ".json";
+            var height = "60"
+            var width= "110"
+
+            // fills the container with event info and images
+            container.html("<dt>"+"<b>Date:</b> "+date+"    <b>Time:</b> "+time+"</dt>")
+            container.append("<dt>"+"<b>Magnitude:</b> "+magnitude+" Mw"+ "</dt>")
+            container.append("<dt>"+"<b>Source depth:</b> "+depth+" km"+ "</dt>")
+            container.append( '<a href='+link1+' target="popup" onclick=window.open("'+link1+'","Output_1","width=1000,height=500") title="Event Information"><img src="static/thumbnail1.png"  height='+height+' width='+width+'/> </a>');
+            container.append( '<a href='+link2+' target="popup" onclick=window.open("'+link2+'","Output_2","width=1000,height=500") title="Waveform Comparison"><img src="static/thumbnail2.png"  height='+height+' width='+width+'/> </a>');
+            container.append( "<dt>"+'<a href='+link3+' target="popup" onclick=window.open("'+link3+'","Output_3","width=1000,height=500") title="Wavespeed Estimation"><img src="static/thumbnail3.png"  height='+height+' width='+width+'/> </a>'+'<a href='+link4+' target="popup" onclick=window.open("'+link4+'","Output_4","width=1000,height=500") title="P-Coda Evaluation"><img src="static/thumbnail4.png"  height='+height+' width='+width+'/> </a>'+"</dt>");
+            container.append( '<a href='+json+ " target = '_blank'>Seismic Event Info [.json-Format]</a>");
+            if (feature.properties.time) {
+                layer.bindPopup(container[0])
+            }
+        }
+        function onStation(feature, layer) {
+
+            var container2 = $('<div />');
+            var name = feature.properties.names
+            var link = feature.properties.linkromy
+
+            // fills the container with event info and images
+            container2.html("<dt>"+"<b>"+names+"</b>"+"</dt>")
+            container2.append("<dt>"+linkromy+"</dt>")
+            layer.bindPopup(container2[0])
+        }
+        
+        $(function() {
+            // initialize the map
+            var map = L.map('map').setView([0, 5], 1);
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                maxZoom: 18,
+                minZoom: 1,
+                id: 'salve-.o6ff8adn',
+                accessToken: "pk.eyJ1Ijoic2FsdmUtIiwiYSI6ImNpZ3M0NDF5MzAwNzZ2bmt1bmk5aGU4aG0ifQ.vdmDEhNU-bKA73pZS31_Ag"
+            }).addTo(map);
+
+
+            var station = L.geoJson({
+                "type": "Feature",
+                "properties": {
+                    "names": "Station Wettzell",
+                    "linkromy": "This is where the Ringlaser and STS2 are!",
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [12.875677, 49.144984]
+                }
+            })
+            .bindPopup("<b>Station Wettzell:</b> G-Ring site" + "<br>" +'<img src="static/image_Gring.jpg" height="120" width="200"/>')
+            .addTo(map);
+
+            markers = new L.LayerGroup().addTo(map);
+            var submit_form = function(e) {
+                $.getJSON($SCRIPT_ROOT +'/query', {
+                    start: $('input[name="start"]').val(),
+                    end: $('input[name="end"]').val(),
+                    minmag: $('input[name="minmag"]').val(),
+                    maxmag: $('input[name="maxmag"]').val(),
+                    minlon: $('input[name="minlon"]').val(),
+                    maxlon: $('input[name="maxlon"]').val(),
+                    minlat: $('input[name="minlat"]').val(),
+                    maxlat: $('input[name="maxlat"]').val()
+                }, function(data) {
+                    // window.alert(JSON.stringify(data.features[0])) //"Zero events for the specified parameter range!")
+                    if (typeof data.features[0] === 'undefined') {
+                        swal({
+                          title: "Error!",
+                          text: "More than 2500 events in the specified parameter range. Please confine!",
+                          type: "error",
+                          confirmButtonText: "Ok"
+                        });
+                    }
+                    else {
+                        swal({timer :2000, closeOnConfirm:false, showConfirmButton:false,
+                          title: "Found " + data.features.length + " event(s) in database!",
+                          type: "success",
+                          // confirmButtonText: "Ok"
+                        });
+                        markers.clearLayers(); // so markers for each new search are not plotted ontop of the old ones
+                        var marker = L.geoJson(data, {onEachFeature: onEachFeature,
+                            pointToLayer: function (feature, latlng) {
+                                if (feature.properties.depth < 10) {
+                                    var color_fill = "yellow"}
+                                else if (feature.properties.depth > 10 && feature.properties.depth < 30) {
+                                    var color_fill = "#FF9966"}
+                                else if (feature.properties.depth > 30 && feature.properties.depth < 100) {
+                                    var color_fill = "red"}
+                                else if (feature.properties.depth > 100 && feature.properties.depth < 200) {
+                                    var color_fill = "green"}
+                                else {var color_fill = "blue"}
+
+                                var geojsonMarkerOptions = {
+                                    radius: Math.pow(feature.properties.magnitude,3)/50.,
+                                    fillColor: color_fill,
+                                    color: "#000",
+                                    weight: 1,
+                                    opacity: 0.8,
+                                    fillOpacity: 0.5
+                                };    
+                                return L.circleMarker(latlng, geojsonMarkerOptions);
+                            }
+                        }).addTo(markers);
+                    };
+                    // $('input[name="start"]').focus().select();
+                });
+                return false; // to avoid default behavior aka navigation to '#'
+            L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
+            };
+            $('a#calculate').bind('click', submit_form);
+            $('input[type=text]').bind('keydown', function(e) {
+                if (e.keyCode == 13) {
+                    submit_form(e);
+                }
+            });
+            // $('input[name="start"]').focus();
+        });
+    </script>
+    <br>
+    <center>
+        <table style=" margin-right:430px" border="1">
+            <tr>
+                <td bgcolor="#FFFF99"> <font size="1">d &lt 10km</font></td>
+                <td bgcolor="#FFCC99"> <font size="1">10km &lt d &lt 30km </font></td>
+                <td bgcolor="#FF6666"> <font size="1"> 30km &lt d &lt 100km </font></td>
+                <td bgcolor="#33CC66"> <font size="1">100km &lt d &lt 200km</font></td>
+                <td bgcolor="#3366CC"> <font size="1">d &gt 200km</font></td>
+            </tr>
+        </table>
+    </center>
+    <center>
+        <span style="padding-right:60px">
+        <font size="2"><b>color codes depth | size codes magnitude</b></font> 
+    
+        <span style="padding-left:300px"> <font size="2">powered by:</font> 
+    </center>
+    <center>
+        <span style="padding-left:659px">
+        <a href="http://www.geophysik.uni-muenchen.de/" target = "_blank" title='LMU Geophysics Website'><img src="static/LMU_Logo.png"  height=40 width=80/> </a>
+        <a href="http://www.geophysik.uni-muenchen.de/ROMY/" target = "_blank" title='ROMY-Website'><img src="static/romy_logo.png"  height=40 width=100/> </a>
+    </center>
+{% endblock content %}
+
