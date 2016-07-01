@@ -10,7 +10,7 @@ import pylab as pl
 import matplotlib.patches as mpatches
 plt.style.use('ggplot')
 #plt.rcParams['figure.figsize'] = 12, 8
-
+plt.rcParams['axes.linewidth'] = 1.5
 
 
 
@@ -107,6 +107,10 @@ ax2.set_ylim(-1,1.2)
 ax2.set_ylabel('\nx-corr coef.')
 ax2.annotate('0.75 threshold', xy=(50,.8),xycoords='data')
 ax2.grid(visible=False)
+ax2.spines['bottom'].set_color('k')
+ax2.spines['top'].set_color('k')
+ax2.spines['left'].set_color('k')
+ax2.spines['right'].set_color('k')
 
 # ax1.plot(RLAS[0].times(), RLAS[0].data)
 # ax1.set_ylabel('vert. rot. rate \n[nrad/s]')
@@ -142,6 +146,10 @@ ax3.axvline(arriv_p,linewidth=1,c='k');ax.axvline(arriv_p,linewidth=1,c='k')
 ax3.annotate('P-arrival', xy=(arriv_p+20,4.5),xycoords='data');
 ax3.axvline(arriv_s,linewidth=1,c='k');ax.axvline(arriv_s,linewidth=1,c='k')
 ax3.annotate('S-arrival', xy=(arriv_s+20,4.5),xycoords='data');
+ax3.spines['bottom'].set_color('k')
+ax3.spines['top'].set_color('k')
+ax3.spines['left'].set_color('k')
+ax3.spines['right'].set_color('k')
 
 pl.subplots_adjust(bottom=0.2,left=0.1,right=0.88, wspace=0.3)
 plt.show()

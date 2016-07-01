@@ -14,12 +14,15 @@ import matplotlib as mpl
 import matplotlib.patches as patches
 import matplotlib.lines as mlines
 from pylab import Rectangle
+import os
+from obspy import read
 
 
 
 #get_ipython().magic(u'matplotlib inline')
 plt.style.use('ggplot')
 plt.rcParams['figure.figsize'] = 15, 8
+plt.rcParams['axes.linewidth'] = 1.5
 
 
 # **Download data streams**
@@ -29,6 +32,22 @@ plt.rcParams['figure.figsize'] = 15, 8
 # + Wettzell Ring Laser data is available on different channels 
 
 # In[2]:
+def download_data(net,sta,chan,origin_time):
+  dataDir_get = '/import/netapp-m-02-bay200/mseed_online/archive/'
+  fileName = ".".join((net, sta, "." + chan + ".D",
+                       origin_time.strftime("%Y.%j")))
+  filePath = os.path.join(dataDir_get, origin_time.strftime("%Y"),
+                          net, sta, chan + '.D', fileName)
+
+  if os.path.isfile(filePath):
+      try:
+        st = read(filePath, starttime = origin_time,
+                  endtime = origin_time + 3600)
+      except:
+        c = fdsnClient('http://erde.geophsyik.uni-muenchen.de')
+        st = c.get_waveforms(network=net, station=sta, location='', channel=chan,
+                                   starttime=origin_time, endtime=origin_time+3600)
+  return st
 
 
 c_fdsn = fdsnClient('IRIS')
@@ -37,17 +56,17 @@ event = cat[0]
 print(cat)
 print(event.event_descriptions[0]['type'], ': ',event.event_descriptions[0]['text'])
 
-c = arclinkClient(user='test@obspy.org')
 
-start = event.origins[0].time
+
+start=event.origins[0].time
 print('Origin time: ', start)
-end = start + 3600
 
-RLAS = c.get_waveforms(network='BW', station='RLAS', location='', channel='BJZ', starttime=start, endtime=end)
 
-BHE = c.get_waveforms(network='GR', station='WET', location='', channel='BHE', starttime=start, endtime=end)
-BHN = c.get_waveforms(network='GR', station='WET', location='', channel='BHN', starttime=start, endtime=end)
-BHZ = c.get_waveforms(network='GR', station='WET', location='', channel='BHZ', starttime=start, endtime=end)
+RLAS = download_data(net='BW', sta='RLAS', chan='BJZ', origin_time=start)
+
+BHE = download_data(net='GR', sta='WET', chan='BHE', origin_time=start)
+BHN = download_data(net='GR', sta='WET', chan='BHN', origin_time=start)
+BHZ = download_data(net='GR', sta='WET', chan='BHZ', origin_time=start)
 
 AC = Stream(traces=[BHE[0],BHN[0],BHZ[0]])
 ac = AC.copy()
@@ -190,7 +209,7 @@ colors = get_colors(np.linspace(0,36,37), plt.cm.RdYlBu) #rainbow #RdYlBu #bwr
 
 
 fig=plt.figure(figsize=(20/2.54,11/2.54))
-ax=plt.subplot2grid((4, 30), (0, 0), colspan=6, rowspan=2, projection='polar', frameon=False)
+ax=plt.subplot2grid((4, 30), (0, 0), colspan=7, rowspan=2, projection='polar', frameon=False)
 #ax=plt.subplot(111,  projection='polar')
 theta=np.linspace(0,np.pi-np.pi/37.,37)
 radii=np.ones(37)
@@ -214,6 +233,7 @@ ax.text(4.6,1,'Backazimuth\nGrid Search',fontsize=10)#,fontweight='')
 ax.tick_params(axis='both', which='major', pad=40)
 
 
+
 #legend
 k_line = mlines.Line2D([], [], color='k',label='transv. acc.',linewidth=2)
 r_line = mlines.Line2D([], [], color='r', label='vert. rot. rate',linewidth=2)
@@ -235,12 +255,17 @@ for ii in range(3,39): # center the baz values around the estimated best value o
 tra.plot(time[500*sampling_rate:1100*sampling_rate], -5+RLAS[0][500*sampling_rate:1100*sampling_rate], c='r', linewidth=1)
 tra.set_xlim(900,1100)
 tra.set_yticks([])
+tra.spines['bottom'].set_color('k')
+tra.spines['top'].set_color('k')
+tra.spines['left'].set_color('k')
+tra.spines['right'].set_color('k')
+
 
 ## Frame
-autoAxis = tra.axis()
-rec = Rectangle((autoAxis[0],autoAxis[2]),(autoAxis[1]-autoAxis[0]),(autoAxis[3]-autoAxis[2]),fill=False,lw=4,color='k')
-rec = tra.add_patch(rec)
-rec.set_clip_on(False)
+# autoAxis = tra.axis()
+# rec = Rectangle((autoAxis[0],autoAxis[2]),(autoAxis[1]-autoAxis[0]),(autoAxis[3]-autoAxis[2]),fill=False,lw=4,color='k')
+# rec = tra.add_patch(rec)
+# rec.set_clip_on(False)
 
 #plt.xticks()
 #plt.ylabel('norm. transv. acc. \n')
@@ -248,6 +273,7 @@ rec.set_clip_on(False)
 #tra.legend()
 tra.axvline(930,c='k',linewidth=2)
 tra.axvline(1015,c='k',linewidth=2)
+mpl.rcParams['axes.linewidth'] = 2
 
 
 wav=plt.subplot2grid((4, 30), (2, 0), colspan=29)
@@ -258,7 +284,10 @@ wav.set_xlim(0, time[-1])
 wav.legend(handles=[k_line,r_line], loc=7,prop={'size':10},fancybox=True)
 wav.set_yticks([-1,0,1])
 wav.set_ylabel('norm.\namp.', fontsize=10)
-#wav.set_xlabel('time [s]')
+wav.spines['bottom'].set_color('k')
+wav.spines['top'].set_color('k')
+wav.spines['left'].set_color('k')
+wav.spines['right'].set_color('k')
 wav.add_patch(
     patches.Rectangle(
         (900, -.9),
@@ -274,9 +303,9 @@ wav.add_patch(
 
 
 transFigure = fig.transFigure.inverted()
-coord1 = transFigure.transform(tra.transData.transform([899,-5.85]))
+coord1 = transFigure.transform(tra.transData.transform([900,-5.65]))
 coord2 = transFigure.transform(wav.transData.transform([900,1.13]))
-coord3 = transFigure.transform(tra.transData.transform([1100.6,-5.84]))
+coord3 = transFigure.transform(tra.transData.transform([1099.6,-5.65]))
 coord4 = transFigure.transform(wav.transData.transform([1100,1.13]))
 line = mpl.lines.Line2D((coord1[0],coord2[0]),(coord1[1],coord2[1]),
                                transform=fig.transFigure,lw=1.5,c='k')
@@ -287,19 +316,22 @@ fig.lines = line,line2,
 
 
 # backazimuth estimation plot
-plt.subplot2grid((4, 30), (3, 0), colspan=29, sharex=wav)
-im = plt.pcolor(X, Y, corrbaz, cmap=plt.cm.RdYlGn_r)
+baz = plt.subplot2grid((4, 30), (3, 0), colspan=29, sharex=wav)
+im = baz.pcolor(X, Y, corrbaz, cmap=plt.cm.RdYlGn_r)
 xx=np.arange(0, sec * len(corrcoefs) + 1, sec)
 eba=np.ones(len(xx))*104
-plt.plot(xx, eba,c='.5', lw=1.5)
-plt.plot(np.arange(0, sec * len(corrcoefs), sec), maxcorr, '.k',linewidth=6)
-plt.yticks([0,90,180,270,360])
-plt.xlim(0, time[-1])
-plt.ylim(0, 360)
-plt.ylabel(u'est.\nBAz [°]', fontsize=10)
-plt.xlabel('time [s]', fontsize=10)
-plt.text(3000, 106, u'EBAz=104°', color='k',fontsize=9,backgroundcolor='.9')#fontweight='bold') #
-
+baz.plot(xx, eba,c='.5', lw=1.5)
+baz.plot(np.arange(0, sec * len(corrcoefs), sec), maxcorr, '.k',linewidth=6)
+baz.set_yticks([0,90,180,270,360])
+baz.set_xlim(0, time[-1])
+baz.set_ylim(0, 360)
+baz.set_ylabel(u'est.\nBAz [°]', fontsize=10)
+baz.set_xlabel('time [s]', fontsize=10)
+baz.text(3000, 106, u'EBAz=104°', color='k',fontsize=9,backgroundcolor='.9')#fontweight='bold') #
+baz.spines['bottom'].set_color('k')
+baz.spines['top'].set_color('k')
+baz.spines['left'].set_color('k')
+baz.spines['right'].set_color('k')
 
 # add colorbar
 fig = plt.subplot2grid((4, 30), (3, 29))
