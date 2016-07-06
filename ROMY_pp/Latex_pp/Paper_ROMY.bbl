@@ -1,0 +1,145 @@
+\begin{thebibliography}{14}
+\newcommand{\enquote}[1]{``#1''}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\noopsort}[1]{}
+\providecommand{\switchargs}[2]{#2#1}
+
+\bibitem[{{Aki} and {Richards}(2002 and 1980)}]{AkiRichards2002}
+\bibinfo{author}{{Aki}, K.} and \bibinfo{author}{{Richards}, P.~G.}
+  (\textbf{\bibinfo{year}{2002 and 1980}}). \emph{\bibinfo{title}{{Quantitative
+  Seismology, 2nd Ed.}}} (\bibinfo{publisher}{University Science Books}).
+
+\bibitem[{Hadziioannou \emph{et~al.}(2012)Hadziioannou, Gaebler, Schreiber,
+  Wassermann, and Igel}]{Hadziioannou2012}
+\bibinfo{author}{Hadziioannou, C.}, \bibinfo{author}{Gaebler, P.},
+  \bibinfo{author}{Schreiber, U.}, \bibinfo{author}{Wassermann, J.}, and
+  \bibinfo{author}{Igel, H.} (\textbf{\bibinfo{year}{2012}}).
+  \enquote{\bibinfo{title}{Examining ambient noise using colocated measurements
+  of rotational and translational motion}}, \bibinfo{journal}{Journal of
+  Seismology} \textbf{\bibinfo{volume}{16}}, \bibinfo{pages}{787--796},
+  \urlprefix\url{http://dx.doi.org/10.1007/s10950-012-9288-5}.
+
+\bibitem[{Igel \emph{et~al.}(2007)Igel, Cochard, Wassermann, Flaws, Schreiber,
+  Velikoseltsev, and Pham~Dinh}]{Igel2007}
+\bibinfo{author}{Igel, H.}, \bibinfo{author}{Cochard, A.},
+  \bibinfo{author}{Wassermann, J.}, \bibinfo{author}{Flaws, A.},
+  \bibinfo{author}{Schreiber, U.}, \bibinfo{author}{Velikoseltsev, A.}, and
+  \bibinfo{author}{Pham~Dinh, N.} (\textbf{\bibinfo{year}{2007}}).
+  \enquote{\bibinfo{title}{Broad-band observations of earthquake-induced
+  rotational ground motions}}, \bibinfo{journal}{Geophysical Journal
+  International} \textbf{\bibinfo{volume}{168}}, \bibinfo{pages}{182--196},
+  \urlprefix\url{http://gji.oxfordjournals.org/content/168/1/182.abstract}.
+
+\bibitem[{Igel \emph{et~al.}(2005)Igel, Schreiber, Flaws, Schuberth,
+  Velikoseltsev, and Cochard}]{Igel2005}
+\bibinfo{author}{Igel, H.}, \bibinfo{author}{Schreiber, U.},
+  \bibinfo{author}{Flaws, A.}, \bibinfo{author}{Schuberth, B.},
+  \bibinfo{author}{Velikoseltsev, A.}, and \bibinfo{author}{Cochard, A.}
+  (\textbf{\bibinfo{year}{2005}}). \enquote{\bibinfo{title}{Rotational motions
+  induced by the m8.1 tokachi-oki earthquake, september 25, 2003}},
+  \bibinfo{journal}{Geophysical Research Letters}
+  \textbf{\bibinfo{volume}{32}}, \bibinfo{pages}{n/a--n/a},
+  \urlprefix\url{http://dx.doi.org/10.1029/2004GL022336},
+  \bibinfo{note}{l08309}.
+
+\bibitem[{Krischer \emph{et~al.}(2015)Krischer, Megies, Barsch, Beyreuther,
+  Lecocq, Caudron, and Wassermann}]{Krischer2015}
+\bibinfo{author}{Krischer, L.}, \bibinfo{author}{Megies, T.},
+  \bibinfo{author}{Barsch, R.}, \bibinfo{author}{Beyreuther, M.},
+  \bibinfo{author}{Lecocq, T.}, \bibinfo{author}{Caudron, C.}, and
+  \bibinfo{author}{Wassermann, J.} (\textbf{\bibinfo{year}{2015}}).
+  \enquote{\bibinfo{title}{Obspy: a bridge for seismology into the scientific
+  python ecosystem}}, \bibinfo{journal}{Computational Science \& Discovery}
+  \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{014003},
+  \urlprefix\url{http://stacks.iop.org/1749-4699/8/i=1/a=014003}.
+
+\bibitem[{Kurrle \emph{et~al.}(2010)Kurrle, Igel, Ferreira, Wassermann, and
+  Schreiber}]{Kurrle2010}
+\bibinfo{author}{Kurrle, D.}, \bibinfo{author}{Igel, H.},
+  \bibinfo{author}{Ferreira, A. M.~G.}, \bibinfo{author}{Wassermann, J.}, and
+  \bibinfo{author}{Schreiber, U.} (\textbf{\bibinfo{year}{2010}}).
+  \enquote{\bibinfo{title}{Can we estimate local love wave dispersion
+  properties from collocated amplitude measurements of translations and
+  rotations?}}, \bibinfo{journal}{Geophysical Research Letters}
+  \textbf{\bibinfo{volume}{37}}, \bibinfo{pages}{n/a--n/a},
+  \urlprefix\url{http://dx.doi.org/10.1029/2009GL042215},
+  \bibinfo{note}{l04307}.
+
+\bibitem[{McLeod \emph{et~al.}(1998)McLeod, Stedman, Webb, and
+  Schreiber}]{McLeod1998}
+\bibinfo{author}{McLeod, D.~P.}, \bibinfo{author}{Stedman, G.~E.},
+  \bibinfo{author}{Webb, T.~H.}, and \bibinfo{author}{Schreiber, U.}
+  (\textbf{\bibinfo{year}{1998}}). \enquote{\bibinfo{title}{Comparison of
+  standard and ring laser rotational seismograms}}, \bibinfo{journal}{Bulletin
+  of the Seismological Society of America} \textbf{\bibinfo{volume}{88}},
+  \bibinfo{pages}{1495--1503},
+  \urlprefix\url{http://www.bssaonline.org/content/88/6/1495.abstract}.
+
+\bibitem[{Megies \emph{et~al.}(2011)Megies, Beyreuther, Barsch, Krischer, and
+  Wassermann}]{Megies2011}
+\bibinfo{author}{Megies, T.}, \bibinfo{author}{Beyreuther, M.},
+  \bibinfo{author}{Barsch, R.}, \bibinfo{author}{Krischer, L.}, and
+  \bibinfo{author}{Wassermann, J.} (\textbf{\bibinfo{year}{2011}}).
+  \enquote{\bibinfo{title}{Obspy – what can it do for data centers and
+  observatories?}}, \bibinfo{journal}{Annals of Geophysics}
+  \textbf{\bibinfo{volume}{54}},
+  \urlprefix\url{http://www.annalsofgeophysics.eu/index.php/annals/article/view/4838}.
+
+\bibitem[{Pancha \emph{et~al.}(2000)Pancha, Webb, Stedman, McLeod, and
+  Schreiber}]{Pancha2000}
+\bibinfo{author}{Pancha, A.}, \bibinfo{author}{Webb, T.},
+  \bibinfo{author}{Stedman, G.}, \bibinfo{author}{McLeod, D.}, and
+  \bibinfo{author}{Schreiber, K.} (\textbf{\bibinfo{year}{2000}}).
+  \enquote{\bibinfo{title}{Ring laser detection of rotations from teleseismic
+  waves}}, \bibinfo{journal}{Geophys. Res. Lett} \textbf{\bibinfo{volume}{27}},
+  \bibinfo{pages}{3553--3556}.
+
+\bibitem[{Pérez and Granger(2007)}]{Perez2007}
+\bibinfo{author}{Pérez, F.} and \bibinfo{author}{Granger, B.~E.}
+  (\textbf{\bibinfo{year}{2007}}). \enquote{\bibinfo{title}{Ipython: A system
+  for interactive scientific computing}}, \bibinfo{journal}{Computing in
+  Science \& Engineering} \textbf{\bibinfo{volume}{9}},
+  \bibinfo{pages}{21--29},
+  \urlprefix\url{http://scitation.aip.org/content/aip/journal/cise/9/3/10.1109/MCSE.2007.53}.
+
+\bibitem[{Schreiber \emph{et~al.}(2003)Schreiber, Klügel, and
+  Stedman}]{Schreiber2003}
+\bibinfo{author}{Schreiber, K.~U.}, \bibinfo{author}{Klügel, T.}, and
+  \bibinfo{author}{Stedman, G.~E.} (\textbf{\bibinfo{year}{2003}}).
+  \enquote{\bibinfo{title}{Earth tide and tilt detection by a ring laser
+  gyroscope}}, \bibinfo{journal}{Journal of Geophysical Research: Solid Earth}
+  \textbf{\bibinfo{volume}{108}}, \bibinfo{pages}{n/a--n/a},
+  \urlprefix\url{http://dx.doi.org/10.1029/2001JB000569}, \bibinfo{note}{2132}.
+
+\bibitem[{Schreiber \emph{et~al.}(2004)Schreiber, Velikoseltsev, Rothacher,
+  Klügel, Stedman, and Wiltshire}]{Schreiber2004}
+\bibinfo{author}{Schreiber, K.~U.}, \bibinfo{author}{Velikoseltsev, A.},
+  \bibinfo{author}{Rothacher, M.}, \bibinfo{author}{Klügel, T.},
+  \bibinfo{author}{Stedman, G.~E.}, and \bibinfo{author}{Wiltshire, D.~L.}
+  (\textbf{\bibinfo{year}{2004}}). \enquote{\bibinfo{title}{Direct measurement
+  of diurnal polar motion by ring laser gyroscopes}}, \bibinfo{journal}{Journal
+  of Geophysical Research: Solid Earth} \textbf{\bibinfo{volume}{109}},
+  \bibinfo{pages}{n/a--n/a},
+  \urlprefix\url{http://dx.doi.org/10.1029/2003JB002803},
+  \bibinfo{note}{b06405}.
+
+\bibitem[{Stedman(1997)}]{Stedman1997}
+\bibinfo{author}{Stedman, G.~E.} (\textbf{\bibinfo{year}{1997}}).
+  \enquote{\bibinfo{title}{Ring-laser tests of fundamental physics and
+  geophysics}}, \bibinfo{journal}{Reports on Progress in Physics}
+  \textbf{\bibinfo{volume}{60}}, \bibinfo{pages}{615},
+  \urlprefix\url{http://stacks.iop.org/0034-4885/60/i=6/a=001}.
+
+\bibitem[{Stedman \emph{et~al.}(1995)Stedman, Li, and Bilger}]{Stedman1995}
+\bibinfo{author}{Stedman, G.~E.}, \bibinfo{author}{Li, Z.}, and
+  \bibinfo{author}{Bilger, H.~R.} (\textbf{\bibinfo{year}{1995}}).
+  \enquote{\bibinfo{title}{Sideband analysis and seismic detection in a large
+  ring laser}}, \bibinfo{journal}{Appl. Opt.} \textbf{\bibinfo{volume}{34}},
+  \bibinfo{pages}{5375--5385},
+  \urlprefix\url{http://ao.osa.org/abstract.cfm?URI=ao-34-24-5375}.
+
+\end{thebibliography}

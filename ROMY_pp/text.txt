@@ -1,0 +1,123 @@
+An Event Database for Rotational Seismology 
+Salvermoser, Johannes, Bryant Chow, Celine Hadziioannou, Sarah Hable, Catalina-M Ramos Domke, Joachim Wassermann, Ulrich Schreiber, Andre Gebauer and Heiner Igel
+
+
+Introduction/Motivation:
+	Why rotational measurements?
+	Summary of related previous studies: Igel et al. (2005 & 2007), Hadziioannou et al. (2012), …
+Since the beginning of the 20th century, seismology has been dominated by only one type of observation: translational ground motions (usually measured as three orthogonal components: N-S, E-W, vertical). In the past two decades, due to the emerging ring laser development and its calibration to high sensitivities (Stedman et al. (1995); Stedman (1997); Schreiber et al. (2003, 2004)) for geodetic applications, rotational ground motions have become available as a new observable in seismology. Aki and Richards (1980, 2002) have proposed that with the additional three components of rotational ground motion in a single measurement point allow to completely reconstruct local ground motion. …
+
+	Intention of the project:
+	make processed data publicly available → browse waveforms and parameters by events
+	present guides and python (open access) source-code examples to download ring laser waveforms → teaching by ipython notebooks!?
+	Provide meta-data (peak-values, SNRs, ...) to public which can be processed by openly 
+
+This project was initiated for two reasons: the first main goal is to make processed ring laser data publicly available in order to promote its usage and significance for seismological applications. In this context, we built up an event database containing processed event plots and separate metadata files. 
+The second goal is to show how ring laser waveforms (here vertical component rotation rates from Wettzell “G-Ring”) can be accessed and processed. For that purpose, we provide tutorials in terms of open source ObsPy based Jupyter Notebooks (P´erez & Granger (2007)) which graphically and interactively present the basic processing - as used for the database - while providing helpful background information.
+
+Currently, as mentioned before, we process data provided by a single station, the Wettzell Geodetic Observatory in S-E Germany. The 4 x 4 m ring laser “G-Ring”, located there, measures the Sagnac-interference at very high precision, yielding a sensitivity to rotations around the vertical axis that is high enough to record even teleseismic events at reasonable signal-to-noise ratio.
+Translational ground motions are measured parallel to the rotations using a collocated STRECKEISEN STS-2 broadband seismometer.
+
+Website
+The website provides the caller/visitor with a graphical user interface of the database and several additional information and links to topic-related projects.
+Upon defining filter parameters (time period, magnitude, latitude/longitude), the user gets a map representation of the specified available event catalog.  In the zoomable world map, the earthquake events markers are sized and dyed according to the earthquake’s moment magnitude and source depth, respectively. This is intended to help finding the desired event more quickly.
+By clicking on the event markers, the user opens a popup menu yielding a short description of the event by means of source time, magnitude and depth. The popup also contains links to a couple of images for the processed waveform data of rotational and translational ground motions:
+	Event information
+	Waveform comparison
+	Parameter estimation (Love wave phase velocity, backazimuth)
+	P-coda analysis
+Finally, it comprises a metadata parameter file in an easily readable json-dictionary format. This dictionary contains all event and data fetching information and most importantly result parameters like e.g. peak values (displacement, acceleration, rotation rate, correlation), signal-to-noise ratios, mean phase velocities (+ STDs), estimated and theoretical backazimuth and many more.
+
+
+Database:
+	Currently running data of one station: 
+	ring laser and a broadband seismometer at the Wettzell Geodetic Observatory in S-E Germany
+→ short station description (not too specific!): G-Ring, Broadband seismometer
+→ Aim: include waveforms from PFO, Christchurch, Gran Sasso?, FFB
+	Features:
+	GCMT catalog
+	Download example code
+	Search parameters
+	Map
+	Popup-Menue
+	Event availability notes (Which events are available?)
+
+
+Processing catalog entries
+The event database is automatically updated on a daily basis. It is fed by event quick solutions (xml-format) provided by the Global Centroid Moment Tensor (GCMT) catalog. This catalog contains global earthquake events featuring moment magnitudes Mw, usually larger than 4.5. The event-/data-download and processing is based on different ObsPy routines (Megies et al. (2011), Krischer et al. (2015)).
+After fetching the event information (origin time, epicenter, depth, etc.), raw ring laser and collocated seismometer waveforms are downloaded via FDSN (“International Federation of Digital Seismograph Networks”) web service.
+The pre-processing of the downloaded seismic data streams is determined by the source-receiver distance (cf. table 1). 
+Firstly, the seismometer’s impulse response is remove,  a derivation of ground acceleration [nm/s²] from the measured ground velocity and scaling of the ring laser observation to [nrad/s] is performed. The traces are low-pass filtered to decrease the impact of high frequency body waves and the ambient “cultural noise”. Furthermore, for teleseismic events, we apply a bandstop-filter to erase the secondary microseism (~7s period) which is more prominent than the primary microseism (Hadziioannou  et al. (2012)) and causes shifts in our backazimuth estimation especially for Mid- to South-Atlantic events.
+ 
+
+Love wave phase velocities:
+In order to derive Love wave phase velocities, the observed and pre-processed signals are compared analogous to Igel et al. (2005): under the assumption of a transversely polarized plane wave, the vertical rotation rate and transverse acceleration are in phase and the amplitudes are related by: 
+a_t⁄((Ω_z ) ´=-2c)  (1),
+where c is the horizontal phase velocity [McLeod et al. (1998); Pancha et al. (2000)]. We therefor in a first step rotate (by the theoretical BAz) the horizontal acceleration components (North-East) in the source-receiver plane to Radial-Transverse to obtain a phase-match with the vertical rotation rate. The transverse acceleration and vertical rotation rate traces are then divided into sliding windows of equal size depending on the epicentral distance of the event (see table 1).
+For each of these windows, a zero-lag normalized cross-correlation analysis is applied to at and (Ω_z ) ´ to check the coherence between the two waveforms (figure 2 [upper]). The resulting cross-correlation coefficient (CC) is used as a quality criterion (=threshold) for the determination of the phase velocities. For windows only featuring CC > 0.75, the horizontal phase velocity c is calculated by inserting peak values of at and (Ω_z ) ´  in the relation of eq. 1 (figure 2 [lower]).
+For “unfiltered” traces and high waveform coherence (=high quality signal) we will obtain an impression of the dispersive behaviour of Love waves right away by looking at the temporal evolution of the phase velocity. The dominant frequency of Love waves increases with time, so phase velocities decrease.
+
+Backazimuth estimation:
+As in the phase velocity estimation and analogous to Igel et al. (2007) we investigate sliding windows throughout the signal to catch the evolution of the signal source direction, so again the traces are split into windows according to table 1. 
+For each window, we estimate the direction of the signal in the two pre-processed traces employing a grid search optimization algorithm. The routine loops through all possible backazimuth directions (0° to 360°) in 1°- steps, for each step rotates the horizontal component acceleration (N-E) by the specified BAz-angle and then cross-correlates it with the vertical rotation rate. The CCs are maximal for a rotation from N-E to radial-transverse which is equivalent to rotating in the direction of the strongest signal source. In practice only widows reaching 90% correlation after rotation are considered in the estimation of the final BAz value, which is the average of the associated (CC>0.9) BAz results. 
+Under the assumption of surface waves travelling on great circle paths, the conformity of theoretical and estimated BAz is a measure for the conformity of the two recorded measurands (rotation rate, transv. acc.) and thus for the resolution quality of the two instruments. However, disparities between the two directions (theoretical, estimated) in combination with higher CCs on the estimated BAz side may indicate deviations of the actual Love wave path in the source-receiver plane. Thus, it might suggest heterogeneities/scatterers in the dimension of the wavelength along the direct wave path.
+
+Conclusions
+	Inclusion of other ring lasers (PFO, Christchurch, FFB, Gan Sasso?) in future
+	Statistical evaluations:
+	Magnitude scale based on rotational ground motions (Love waves)
+	Local, one-station tomography
+	Analysis of azimuthal effects
+	…
+
+
+References
+	Igel et al. (2005): “Rotational motions induced by …”
+	Igel et al. (2007): “Broad band observations of earth …”
+	Hadziioannou et al. (2012): “Examining ambient noise using co-located …”
+	Schreiber et al. (2003): “New applications of very large ring lasers”
+	Kurrle et al. (2010): “Can we estimate local Love wave dispersion properties ...”
+	Krischer et al. (2015): “Obspy: a bridge for seismology ...”
+	Megies et al. (2011): “Obspy – What can it do for data centers ...”
+	McLeod et al. (1998)
+	 Pancha et al. (2000)
+	Fernando Pérez, Brian E. Granger, IPython: A System for Interactive Scientific Computing, Computing in Science and Engineering, vol. 9, no. 3, pp. 21-29, May/June 2007, doi:10.1109/MCSE.2007.53. URL: http://ipython.org
+	Add: leaflet, mapbox, flask?
+	…
+
+Table 1:
+	Distance
+ range	Lowpass 
+cutoff	Resampling decimation factor	Cross-correlation
+window length	Microseism
+bandstop
+close	0 <= d <= 3°	4 Hz	2	3 s	-
+local	3° < d <= 10° 	2 Hz	2	5 s	-
+tele	d > 10°	1 Hz	4	120 s	5s - 12s
+
+ 
+
+
+
+ 
+
+
+
+
+	Title page with all authors’ names and affiliations, and complete contact information for the corresponding author.
+	Abstracts required for all Regular and Eastern Section articles
+	Text (Introduction, Body, Conclusion)
+	Data & Resources - this section will be required for all SRL articles published in January 2016 and later; requirements are the same as for D&R in BSSA -- see D&R guidelines below. 
+	Acknowledgments
+	References
+	Tables
+	Figures for information and fees, see below.
+	Appendixes (optional)
+	Captions for tables and figures
+	Electronic Supplement (optional) - for instructions and fees, see SSA's guidelines for electronic supplements, linked at the bottom of this page.
+
+Data and Resources Guidelines
+An online database, however, is an unpublished work, so it must be listed in the  Data and Resources. (A published work describing the database can be included in the References, but online databases themselves must be cited in the Data and Resources section.)
+→ IRIS, GCMT
+e.g. When a data source is mentioned in the body of an SRL or BSSA paper, it should be followed by a pointer to the Data and Resources section; e.g., "earthquake mechanisms were obtained from the Global Centroid Moment Tensor Project (see Data and Resources section)." The corresponding entry in the Data and Resources section would be, "The Global Centroid Moment Tensor Project database was searched using www.globalcmt.org/CMTsearch.html (last accessed 5 August 2015)."
+

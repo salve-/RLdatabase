@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Paper_ROMY.aux
+The style file: jasaauthyear.bst
+Database file #1: Bibliography_ROMY.bib.bib
+You've used 14 entries,
+            2857 wiz_defined-function locations,
+            1222 strings with 13627 characters,
+and the built_in function-call counts, 10512 in all, are:
+= -- 784
+> -- 542
+< -- 3
++ -- 197
+- -- 183
+* -- 1444
+:= -- 1539
+add.period$ -- 28
+call.type$ -- 14
+change.case$ -- 134
+chr.to.int$ -- 14
+cite$ -- 14
+duplicate$ -- 665
+empty$ -- 676
+format.name$ -- 227
+if$ -- 1916
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 147
+newline$ -- 53
+num.names$ -- 56
+pop$ -- 133
+preamble$ -- 1
+purify$ -- 117
+quote$ -- 0
+skip$ -- 175
+stack$ -- 0
+substring$ -- 439
+swap$ -- 646
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 123
+warning$ -- 0
+while$ -- 61
+width$ -- 0
+write$ -- 179
