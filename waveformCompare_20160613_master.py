@@ -157,32 +157,35 @@ def download_data(origin_time, net, sta, loc, chan, source):
         contain wild cards.
     :return: Stream object :class: `~obspy.core.stream.Stream`
     """
+    # try:
+    #     c = arclinkClient(user='test@obspy.org')
+    #     st = c.get_waveforms(network=net, station=sta, location='', channel=chan,
+    #                          starttime=origin_time-190,
+    #                          endtime=origin_time+3*3600+10)
     try:
-        c = arclinkClient(user='test@obspy.org')
-        st = c.get_waveforms(network=net, station=sta, location='', channel=chan,
-                             starttime=origin_time-190,
-                             endtime=origin_time+3*3600+10)
-    except:
         print "trying to use fdsn client service..."
         c = fdsnClient(source)
         st = c.get_waveforms(network=net, station=sta, location='', channel=chan,
                              starttime=origin_time-190,
                              endtime=origin_time+3*3600+10)
-    # dataDir_get = '/import/netapp-m-02-bay200/mseed_online/archive/'
-    # fileName = ".".join((net, sta, "." + chan + ".D",
-    #                      origin_time.strftime("%Y.%j")))
-    # filePath = os.path.join(dataDir_get, origin_time.strftime("%Y"),
-    #                         net, sta, chan + '.D', fileName)
 
-    # if os.path.isfile(filePath):
-    #     st = read(filePath, starttime = origin_time - 180,
-    #               endtime = origin_time + 3 * 3600)
-    # else:
-    #     print "++++ cannot find the following file: \n %s \n++++" % filePath
+    except:
+        print "trying to fetch data from file..."        
+        dataDir_get = '/import/netapp-m-02-bay200/mseed_online/archive/'
+        fileName = ".".join((net, sta, "." + chan + ".D",
+                             origin_time.strftime("%Y.%j")))
+        filePath = os.path.join(dataDir_get, origin_time.strftime("%Y"),
+                                net, sta, chan + '.D', fileName)
 
-    # if not st:
-    #     raise RotationalProcessingException('Data not available for this'
-    #                                         ' event...')
+        if os.path.isfile(filePath):
+            st = read(filePath, starttime = origin_time - 180,
+                      endtime = origin_time + 3 * 3600)
+        else:
+            print "++++ cannot find the following file: \n %s \n++++" % filePath
+
+        if not st:
+            raise RotationalProcessingException('Data not available for this'
+                                                ' event...')
     st.trim(starttime=origin_time-180, endtime=origin_time+3*3600)
 
     print 'Download of', st[0].stats.station, st[0].stats.channel, \
@@ -235,7 +238,7 @@ def event_info_data(event, station, mode):
     else:
         depth = origin.depth * 0.001  # Depth in km
     if station == 'WET':
-        source = 'http://erde.geophysik.uni-muenchen.de'
+        source = 'http://erde.geophysik.uni-muenchen.de' # if erde doesn't work, try 'BGR'
         net_r = 'BW'
         net_s = 'GR' #GR'
         sta_r = 'RLAS'
@@ -251,7 +254,7 @@ def event_info_data(event, station, mode):
         chan4 = 'BHZ'
         # ringlaser signal
         rt = download_data(startev, net_r, sta_r, loc_r, chan1, source)
-        rt[0].data = rt[0].data * (-1)
+        #rt[0].data = rt[0].data * (-1) ## apply only for periods of flipped data due to instrument errors
         # broadband station signal
         acE = download_data(startev, net_s, sta_s, loc_s, chan2, source)
         acN = download_data(startev,  net_s, sta_s, loc_s, chan3, source)
@@ -746,7 +749,7 @@ def ps_arrival_times(distance, depth, init_sec):
     :return arriv_s: Arrival time of the first S-wave.
     """
     # use taup to get the theoretical arrival times for P & S
-    TauPy_model = TauPyModel('ak135')
+    TauPy_model = TauPyModel('iasp91')
     tt = TauPy_model.get_travel_times(
         distance_in_degree=0.001 * distance / 111.11, source_depth_in_km=depth)
     tiemp = []
@@ -839,6 +842,7 @@ def time_windows(baz, arriv_p, arriv_s, init_sec, is_local):
         max_lwi = min_lwi + 12
         min_lwf = max_lwi
         max_lwf = min_lwf + 80
+    print(min_pw, min_lwi)
     return min_pw, max_pw, min_sw, max_sw, min_lwi, max_lwi, min_lwf, max_lwf
 
 
@@ -1233,8 +1237,10 @@ def store_info_json(rotate, ac, rt, corrcoefs, baz, arriv_p, EBA, tag_name,
             ('event_source', event_source),
             ('starttime', str(startev-180)),
             ('endtime', str(startev+3*3600)),
-            ('latitude', str(rt[0].stats.coordinates['latitude'])),
-            ('longitude', str(rt[0].stats.coordinates['longitude'])),
+            ('station_latitude', str(rt[0].stats.coordinates['latitude'])),
+            ('station_longitude', str(rt[0].stats.coordinates['longitude'])),
+            ('event_latitude', event.preferred_origin().latitude),
+            ('event_longitude', event.preferred_origin().longitude),
             ('magnitude', magnitude),
             ('depth', depth),
             ('depth_unit', 'km'),
