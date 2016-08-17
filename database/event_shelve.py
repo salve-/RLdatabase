@@ -2,13 +2,17 @@
 # -*- coding: utf-8 -*-
 
 from collections import OrderedDict
+from flask import Response
 import fnmatch
 import obspy
 import os
 import re
+import json
+import glob
 import shelve
 import warnings
 import uuid
+import numpy as np
 import geojson
 from geojson import Feature, FeatureCollection, Point
 from obspy.core import UTCDateTime
@@ -27,6 +31,45 @@ class EventShelveWarning(UserWarning):
     """
     pass
 
+def locations2degrees(lat1, long1, lat2, long2):
+    lat1=float(lat1); long1=float(long1); lat2=float(lat2); long2=float(long2);
+    print lat1, type(lat1)
+    lat1 = np.radians(lat1)
+    lat2 = np.radians(lat2)
+    long1 = np.radians(long1)
+    long2 = np.radians(long2)
+    print 'hi'
+    gds = []
+    for i in range(0,len(long2)):
+        long_diff = long2[i] - long1
+        gd = np.degrees(
+            np.arctan2(
+                np.sqrt((
+                    np.cos(lat2[i]) * np.sin(long_diff)) ** 2 +
+                    (np.cos(lat1) * np.sin(lat2[i]) - np.sin(lat1) *
+                        np.cos(lat2[i]) * np.cos(long_diff)) ** 2),
+                np.sin(lat1) * np.sin(lat2[i]) + np.cos(lat1) * np.cos(lat2[i]) *
+                np.cos(long_diff)))
+        gds.append(gd)
+    print 'hi'
+    return gds
+
+def locations2degrees_single(lat1, long1, lat2, long2):
+    lat1=float(lat1); long1=float(long1); lat2=float(lat2); long2=float(long2);
+    lat1 = np.radians(lat1)
+    lat2 = np.radians(lat2)
+    long1 = np.radians(long1)
+    long2 = np.radians(long2)
+    long_diff = long2 - long1
+    gd = np.degrees(
+        np.arctan2(
+            np.sqrt((
+                np.cos(lat2) * np.sin(long_diff)) ** 2 +
+                (np.cos(lat1) * np.sin(lat2) - np.sin(lat1) *
+                    np.cos(lat2) * np.cos(long_diff)) ** 2),
+            np.sin(lat1) * np.sin(lat2) + np.cos(lat1) * np.cos(lat2) *
+            np.cos(long_diff)))
+    return gd
 
 class EventShelve(object):
     def __init__(self, shelve_path, root_folder, quakeml_glob_expr,
@@ -50,12 +93,16 @@ class EventShelve(object):
         quakeml_filenames = set(quakeml_filenames)
         filenames_in_shelve = set(self._s.keys())
 
+
+
+
         # Delete all files no longer available.
         to_be_removed = filenames_in_shelve - quakeml_filenames
         for filename in to_be_removed:
             del self._s[filename]
 
         filenames_in_shelve = set(self._s.keys())
+        print(filenames_in_shelve)
 
         # Find files that need to be added.
         to_be_added = quakeml_filenames - filenames_in_shelve
@@ -72,6 +119,13 @@ class EventShelve(object):
                 continue
 
             ev = cat[0]
+            with open(filename[:-3]+'json') as data_file:
+                data = json.load(data_file)
+            peak_rot = data['peak_vertical_rotation_rate']
+            max_xcoef = data['peak_correlation_coefficient']
+            theo_baz = data['theoretical_backazimuth']
+            SNR_rot = data['vertical_rotation_rate_SNR']
+
 
             # Get the event id used for that event.
             event_id = None
@@ -95,7 +149,11 @@ class EventShelve(object):
                 "time": origin.time,
                 "depth_in_km": origin.depth / 1000.0,
                 "magnitude": magnitude.mag,
-                "magnitude_type": magnitude.magnitude_type
+                "magnitude_type": magnitude.magnitude_type,
+                "peak_vertical_rotation_rate": peak_rot,
+                "max_correlation": max_xcoef,
+                "theoretical_BAZ": theo_baz,
+                "SNR_rotation_rate": SNR_rot
             }
 
             self._s[filename] = event_info
@@ -110,8 +168,9 @@ class EventShelve(object):
               maxlatitude=None, minlongitude=None, maxlongitude=None,
               latitude=None, longitude=None, maxradius=None, minradius=None,
               mindepth=None, maxdepth=None, minmagnitude=None,
-              maxmagnitude=None, limit=None, offset=1, orderby="time",
-              event_id=None, query_id=None, **kwargs):
+              maxmagnitude=None, mincor=None, maxcor=None, minpeakrot=None, minSNR=None, 
+              limit=None, offset=1, orderby="time", event_id=None, lat_circ=None, 
+              lon_circ=None, circ_dist=None, query_id=None,format=None, **kwargs):
         """
         FDSN event service like queries.
         """
@@ -123,6 +182,7 @@ class EventShelve(object):
 
         # Find all events according to the query.
         for filename, event in self.events.iteritems():
+            dist = locations2degrees_single(lat_circ, lon_circ, event["latitude"], event["longitude"])
             if (event_id is None or event["event_id"] == event_id) and \
                     (starttime is None or event["time"] >= starttime) and \
                     (endtime is None or event["time"] <= endtime) and \
@@ -134,10 +194,20 @@ class EventShelve(object):
                      event["longitude"] >= float(minlongitude)) and \
                     (maxlongitude is None or
                      event["longitude"] <= float(maxlongitude)) and \
+                    (circ_dist is None or
+                     dist <= float(circ_dist)) and \
                     (mindepth is None or
                      event["depth_in_km"] >= float(mindepth)) and \
                     (maxdepth is None or
                      event["depth_in_km"] <= float(maxdepth)) and \
+                    (mincor is None or
+                     event["max_correlation"] >= float(mincor)) and \
+                    (maxcor is None or
+                     event["max_correlation"] <= float(maxcor)) and \
+                    (minpeakrot is None or
+                     event["peak_vertical_rotation_rate"] >= float(minpeakrot)) and \
+                    (minSNR is None or
+                     event["SNR_rotation_rate"] >= float(minSNR)) and \
                     (minmagnitude is None or
                      event["magnitude"] >= float(minmagnitude)) and \
                     (maxmagnitude is None or
@@ -152,56 +222,72 @@ class EventShelve(object):
 
 
         print "Found events:", len(found_events)
-        if not found_events:
-            return None
-        
-        elif len(found_events)>2500: # this gives a variable that is only used for error messages
-            Feature_Coll = FeatureCollection(Feature(geometry=Point([0,0]))) 
-            # Sort the events.
-        # if orderby == "time":
-        #     found_events = OrderedDict(sorted(found_events.iteritems(),
-        #                                key=lambda x: x[1]["time"]))
-        # elif orderby == "time-asc":
-        #     found_events = OrderedDict(sorted(found_events.iteritems(),
-        #                                key=lambda x: x[1]["time"])[::-1])
-        # elif orderby == "magnitude":
-        #     found_events = OrderedDict(sorted(found_events.iteritems(),
-        #                                       key=lambda x: x[1]["time"]))
-        # elif orderby == "magnitude-asc":
-        #     found_events = OrderedDict(sorted(
-        #         found_events.iteritems(),
-        #         key=lambda x: x[1]["magnitude"])[::-1])
-        # else:
-        #     msg = ("orderby '%s' is not valid. Valid orderings: 'time', "
-        #            "'time-asc', 'magnitude', 'magnitude-asc'" % orderby)
-        #     raise ValueError(msg)
 
-        else:
-            if len(found_events.keys()) == 0:
-                msg = ("Could not find events for the specified parameters")
-                warnings.warn(EventShelveWarning)  
+        # this is just used as a test feature collection: if the catalog does not contain
+        # events for the specified parameters, we create a dummy collection that contains
+        # more than the allowed number of events to being able to filter in the index.html
+        if format=='map':
+            if len(found_events) == 0:
+                ft = Feature(geometry=Point([0,0]))
+                fts = [ft]*2501
+                Feature_Coll = FeatureCollection(fts) 
+            elif len(found_events)>2500: # this gives a variable that is only used for error messages
+                Feature_Coll = FeatureCollection(Feature(geometry=Point([0,0])))
             else:
-                features=[]
-                for ev in range(0,len(found_events.keys())):
-                    URL_P1= str(found_events.keys()[ev])[:-4] + '_page_1.png'
-                    URL_P2= str(found_events.keys()[ev])[:-4] + '_page_2.png'
-                    URL_P3= str(found_events.keys()[ev])[:-4] + '_page_3.png'
-                    URL_P4= str(found_events.keys()[ev])[:-4] + '_page_4.png'
-                    lon = found_events[str(found_events.keys()[ev])]['longitude']
-                    lat = found_events[str(found_events.keys()[ev])]['latitude']
-                    time = found_events[str(found_events.keys()[ev])]['time']
-                    depth = found_events[str(found_events.keys()[ev])]['depth_in_km']
-                    magnitude = found_events[str(found_events.keys()[ev])]['magnitude']
-                    #region = found_evstr(found_events.keys()[ev])]['text']
-                    p = Point([lon,lat])
-                    f=Feature(geometry=p, properties={"time" : str(time), "magnitude" : str(magnitude),
-                     "depth" : str(depth),
-                     "page1_URL": URL_P1,"page2_URL" : URL_P2, "page3_URL" : URL_P3,
-                     "page4_URL" : URL_P4})
-                    features.append(f)
+                if len(found_events.keys()) == 0:
+                    msg = ("Could not find events for the specified parameters")
+                    warnings.warn(EventShelveWarning)  
+                else:
+                    features=[]
+                    for ev in range(0,len(found_events.keys())):
+                        URL_P1= str(found_events.keys()[ev])[:-4] + '_page_1.png'
+                        URL_P2= str(found_events.keys()[ev])[:-4] + '_page_2.png'
+                        URL_P3= str(found_events.keys()[ev])[:-4] + '_page_3.png'
+                        URL_P4= str(found_events.keys()[ev])[:-4] + '_page_4.png'
+                        lon = found_events[str(found_events.keys()[ev])]['longitude']
+                        lat = found_events[str(found_events.keys()[ev])]['latitude']
+                        time = found_events[str(found_events.keys()[ev])]['time']
+                        depth = found_events[str(found_events.keys()[ev])]['depth_in_km']
+                        magnitude = found_events[str(found_events.keys()[ev])]['magnitude']
+                        #region = found_evstr(found_events.keys()[ev])]['text']
+                        p = Point([lon,lat])
+                        f=Feature(geometry=p, properties={"time" : str(time), "magnitude" : str(magnitude),
+                         "depth" : str(depth),
+                         "page1_URL": URL_P1,"page2_URL" : URL_P2, "page3_URL" : URL_P3,
+                         "page4_URL" : URL_P4})
+                        features.append(f)
 
-                Feature_Coll = FeatureCollection(features)
-        return Feature_Coll
+                    Feature_Coll = FeatureCollection(features)
+            return Feature_Coll
+        elif format=='quakeml':
+            if query_id is None:
+                query_id = "smi:local/%s" % str(uuid.uuid4())
+            else:
+                query_id = "smi:" + query_id.replace("http://", "")
+
+            cat_str = ("<?xml version='1.0' encoding='utf-8'?>\n"
+                   '<ns0:quakeml xmlns:ns0="http://quakeml.org/xmlns/quakeml/'
+                   '1.2" xmlns:rotational_seismology_database="http://www.rotational-seismology.org" xmlns="http://quakeml.org/xmlns/bed/1.2">\n'
+                   '  <eventParameters publicID="%s">\n'
+                   "    {events}\n"
+                   "  </eventParameters>\n"
+                   "</ns0:quakeml>" % query_id)
+
+            pattern = re.compile(r"<event\s.*<\/event>", re.DOTALL)
+            event_strings = []
+            for filename in found_events.iterkeys():
+                with open(filename, "rt") as fh:
+                    event_str = fh.read()
+                    event_str = re.findall(pattern, event_str)[0]
+                    if event_str is None:
+                        msg = ("Could not extract event string from event '%'. "
+                               "Will be skipped." % filename)
+                        warnings.warn(EventShelveWarning)
+                        continue
+                    event_strings.append(event_str)
+            cat_str = cat_str.format(events="\n    ".join(event_strings))
+            return Response(cat_str, content_type='text/xml; charset=utf-8')
+
 
     def __del__(self):
         self._s.close()

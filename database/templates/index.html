@@ -7,7 +7,7 @@
 <table width="1200px" border="0" frame="void">
  <tr>
   <td colspan="2" bgcolor="#fff" border="0">
-      <center><img src="static/header.png" width="100%"/></center>
+      <center><img src="static/images/header.png" width="100%"/></center>
       <!-- <h2><img src="static/triangle_square.png" height="20" width="20"/><a href="{{ url_for("index") }}" class="button">&nbsp Ring laser Database - Query  &nbsp</a><img src="static/triangle_square.png" height="20" width="20"/></h2> -->
   </td>
  </tr> 
@@ -36,14 +36,15 @@
             <li>Information on the popup content: <a href="static/explanations.pdf"  onclick="window.open('static/explanations.pdf', 'newwindow', 'width=1000, height=800'); return false;"><b>processing guide</b></a></li>
             <br>
             <li>Event information was fetched from the <a href="http://www.globalcmt.org/"  target="_blank"><b>GCMT catalog</b></a></li><br>
-            <li>Simple data fetching example using <i>ObsPy</i>: <a href="static/fetch_data.py"  target="_blank"><b>source code</b></a></li>
+            <li>Simple data fetching example using <i>ObsPy</i>: <a href="static/fetch_data.py"  target="_blank"><b>source code</b></a></li> <br>
+            <li><i>Obspy</i> based <a class="detail3" href=# id="btn_3">Jupyter notebooks</a> on <a href='http://www.seismo-live.org/'><b>seismo-live</b></a></li>
         </ul>
     </font>
     <span style="padding-left:0px"> <font size="2"> &nbsp powered by:</font> 
     <center>
         <span style="padding-left:0px">
         <!-- <a href="http://www.geophysik.uni-muenchen.de/" target = "_blank" title='LMU Geophysics Website'><img src="static/LMU_Logo.png"  height=75 width=150/> </a> -->
-        <a href="http://www.geophysik.uni-muenchen.de/ROMY/" target = "_blank" title='ROMY-Website'><img src="static/romy_logo.png"  height=60 width=145/> </a>
+        <a href="http://www.geophysik.uni-muenchen.de/ROMY/" target = "_blank" title='ROMY-Website'><img src="static/images/romy_logo.png"  height=60 width=145/> </a>
     </center>
     
   </td>
@@ -51,23 +52,35 @@
   <center>
   <table width="1050px">
    <tr valign="top">
-    <td width="300px" style="padding-left:30px">
+    <td width="300px" style="padding-left:30px" >
         {% from "_formhelpers.html" import render_field %}
         <p>
         <font size="2">
-            <b>Start time </b><span style="padding-left:20px"> <input size="14" type="text" name="start" value="2007-07-18T00:00">
+            <b>Start time </b><span style="padding-left:18px"> <input size="14" name="start" id="buttonPicker" value="2007-07-18T00:00"> <!--<input size="14" type="text" name="start" value="2007-07-18T00:00">-->
             <br>
-            <b>End time</b><span style="padding-left:29px"> <input size="14" id="theDate" name="end">
-            
-            <br>
-            <span style="padding-left:102px"><font color="Grey" size=2>YYYY<b>-</b>mm<b>-</b>dd<b>T</b>HH<b>:</b>MM</font><br>
-            <br>
-            <b>Min. magnitude </b> <span style="padding-left:10px"><input size="2" type="text" name="minmag" value="8.5">
+            <b>End time</b><span style="padding-left:29px"> <input size="14" name="end" id="buttonPicker2">
+            <span style="padding-left:102px"><font color="Grey" size=2>YYYY<b>-</b>mm<b>-</b>dd<b>T</b>HH<b>:</b>MM</font>
+            <hr width="90%" size="1">
+            <p> </p>
+            <b>Min. magnitude </b> <span style="padding-left:10px"><input id="minmagin" size="2" type="text" name="minmag" value="8.5">
             <br> 
-            <b>Max. magnitude </b><span style="padding-left:6px"><input size="2" type="text" name="maxmag" value="9.5">
-            <br><br>
-            <b>Latitude/Longitude:</b>
-
+            <b>Max. magnitude </b><span style="padding-left:6px"><input id="maxmagin" size="2" type="text" name="maxmag" value="9.5">
+            <br>
+            <center>
+                <input id="range_03">
+            </center>
+            <p> </p>
+            <hr width="90%" size="1">
+            <p> </p>
+            <b>Min. depth </b> <span style="padding-left:10px"><input size="2" type="text" name="mindepth" value="0"> <b>km</b>
+            <br> 
+            <b>Max. depth </b><span style="padding-left:6px"><input size="2" type="text" name="maxdepth" value="6371"> <b>km</b>
+            <p> </p>
+            <hr width="90%" size="1">
+            <p> </p>
+            <b>Latitude/Longitude:</b><br>
+            <p> </p>
+            <center>
             <table class="tftable" width="210px">
                 <tr><td width="70px"></td><td width="70px" align="center"><font size="2"><b>North</b></font></td><tdwidth="70px"> </td></tr>
 
@@ -79,13 +92,74 @@
 
                 <tr><td> </td><td align="center"><font size="2"><b>South</b></font></td><td> </td></tr>
             </table>
+            </center>
+            <p> </p>
+            <b>Circular Search:</b> <br>
+            <p> </p>
+            <b>Lat</b> <input size="3" type="text" name="lat_circ" value="49.15"> <b>Lon</b> <input size="3" type="text" name="lon_circ" value="12.88">
+            <b>Radius</b> <input size="2" type="text" name="circ_dist" value="180"><b>°</b>
+            <p> </p>            
+            <hr width="90%" size="1">
+            <p> </p>
+            <b class="detail2"><a href=# id="btn_2"><font color='#000000'>Maximum correlation (</font><font color='#1ab0ff'>CC</font></a>):</b><br>
+            <p> </p>
+            <center>
+                <input id="mincc" size="2" type="text" name="mincor" value="0.0">
+                <b>&lt CC &lt</b><span style="padding-left:6px"><input id="maxcc" size="2" type="text" name="maxcor" value="1.0">
+            </center>
+            <p> </p>
+            <hr width="90%" size="1">
+            <p> </p>
+            <b>Peak rotation rate &ge; </b>
+            <input size="3" type="text" name="minpeakrot" value="0.0"> <b><sup>nrad</sup>/<sub>s</sub></b>
+            <p> </p>
+            <hr width="90%" size="1">
+            <p> </p>
+            <b class="detail4"><a href=# id="btn_4"><font color='#000000'>Rotation Rate </font><font color='#1ab0ff'>SNR</font></a> &ge;</b>
+            <input size="3" type="text" name="minSNR" value="0">
         </font>
-        <p><span style="padding-left:150px">  <a href=# id="calculate"><mybutton type="mybutton"><img src="static/lupe.png" width="12px" height="12px"/><b> Search</b></mybutton></a><br>
     </td>
     <td width="700px">
     <br><br>
     <div id="map"></div>
-    <script type="text/javascript">
+    <br>
+    <center>
+        <a href="" class="markerback" value="[0, 5]">set back view</a><br><br>
+        <table style=" margin-right:0px" border="1" frame="hsides">
+            <tr>
+                <td bgcolor="#FFFF99" width="110px" align="center"> <font size="1">d &lt 10km</font></td>
+                <td bgcolor="#FFCC99" width="110px" align="center"> <font size="1">10km &lt d &lt 30km </font></td>
+                <td bgcolor="#FF0000" width="110px" align="center"> <font size="1"> 30km &lt d &lt 100km </font></td>
+                <td bgcolor="#33CC66" width="110px" align="center"> <font size="1">100km &lt d &lt 200km</font></td>
+                <td bgcolor="#0099FF" width="110px" align="center"> <font size="1">d &gt 200km</font></td>
+            </tr>
+        </table>
+    </center>
+    <center>
+        <span style="padding-right:0px">
+        <font size="2"><b>color codes depth</b></font><br>
+        <img src="static/images/magnitude_table.png"/><br>
+        <font size="2"><b>size codes magnitude</b></font>
+    </center>
+  <br>
+  <span style="padding-left:30px"><a href=# id="calculate"><mybutton type="mybutton"><img src="static/images/lupe.png" width="12px" height="12px"/><b> Plot<br>on Map</b></mybutton></a>
+  <span style="padding-left:10px"><a href=# id="calculatexml"><mybutton2 type="mybutton2"> Download<br>QuakeML</mybutton2></a>
+  <p></p>
+  <span style="padding-left:40px"><a href="{{ url_for("index") }}"><b>Reset Parameters</b></a>
+  </tr>
+  </table>
+  </center>
+  </td>
+    <tr>
+      <td bgcolor="#f2f2f2" border="0" colspan="2" align="right">
+        <font size="2" color="grey"><b>contact:</b> jsalvermoser@geophysik.uni-muenchen.de<br>Copyright &copy Johannes Salvermoser 2016</font>
+      </td>
+    </tr>
+<table>
+</center>
+
+<!-- Scripts -->
+<script type="text/javascript">
         // swing out content by click
         $(document).ready(function () {
         $('body').on('click','li.detail1 a',function () { 
@@ -93,7 +167,23 @@
                     });
         });
 
+        $(document).ready(function () {
+        $('body').on('click','b.detail2 a',function () { 
+                        swal("Maximum Correlation Coefficient", "The coefficient is the result of a cross-correlation\n between vertical rotation rate and transverse acceleration\n (rotated by theoretical backazimuth from N-E-component accelerations)", 'info');
+                    });
+        });
+
+        $(document).ready(function () {
+        $('body').on('click','a.detail3',function () { 
+                        swal("Jupyter Notebooks", "These notebooks contain processing example code for:\n- data download & pre-processing\n- backazimuth estimation\n- phase velocity estimation\n\nAccess them via seismo-live (link below). Launch a new notebook and choose one of the 3 tutorials in the Rotational Seismology repository!\nThis does not require any installation of Python/Obspy on your machine.", 'info');
+                    });
+        })
         
+        $(document).ready(function () {
+        $('body').on('click','b.detail4 a',function () { 
+                        swal("Signal-to-Noise Ratio", "The SNR can be used to filter the events. Low SNR may indicate noise bias. That means that the recorded signal of a distal, low-magnitude event is overprinted by correlating (oceanic) noise.\n\n Set the value to larger than 1000 to avoid that!", 'info');
+                    });
+        })
 
         // Update the date in "end time"
         var today = new Date();
@@ -103,6 +193,70 @@
         if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm} today = yyyy+'-'+mm+'-'+dd+'T00:00';
         $('#theDate').val(today);
 
+        // date picker
+        // $('#datepicker').datepick({dateFormat: 'yyyy-mm-dd'+'T00:00'});
+        // $('#datepicker2').datepick({defaultDate: today, selectDefaultDate: true, dateFormat: 'yyyy-mm-dd'+'T00:00'});
+
+        $('#buttonPicker').datepick({showOnFocus: false, dateFormat: 'yyyy-mm-dd'+'T00:00',
+            minDate: '2007-07-18T00:00', maxDate: today,
+            showTrigger: '<button type="button" class="trigger">' + 
+            '<img src="static/jquery_datepick/calendar-blue.gif" alt="Popup"></button>'});
+
+        $('#buttonPicker2').datepick({showOnFocus: false, defaultDate: today, selectDefaultDate: true,
+            dateFormat: 'yyyy-mm-dd'+'T00:00', minDate: '2007-07-18T00:00', maxDate: today,
+            showTrigger: '<button type="button" class="trigger">' + 
+            '<img src="static/jquery_datepick/calendar-blue.gif" alt="Popup"></button>'});
+
+        //Slider1
+        $(document).ready(function () {
+            var $range = $("#range_03");
+
+            var track = function () {
+                var $this = $(this),
+                    value = $this.prop("value").split(";");
+                $("#minmagin").val(value[0])
+                $("#maxmagin").val(value[1])
+            };
+
+            $range.ionRangeSlider({
+                type: "double",
+                grid: true,
+                min: 3.5,
+                max: 9.5,
+                step: 0.1,
+                from: 3,
+                to_max: 9.5,
+                force_edges: true,
+                onUpdate: function (data) {
+                console.log("onUpdate");
+            }
+            });
+           
+            $range.on("change", track);
+        });
+
+        // Slider2
+        $(document).ready(function () {
+            var $rangecc = $("#range_04");
+
+            var track2 = function () {
+                var $this = $(this),
+                    valuecc = $this.prop("value").split(";");
+                $("#mincc").val(valuecc[0])
+                $("#maxcc").val(valuecc[1])
+            };
+
+            $rangecc.ionRangeSlider({
+                type: "double",
+                grid: true,
+                min: 0.0,
+                max: 1.0,
+                step: 0.1,
+                force_edges: true
+            });
+           
+            $rangecc.on("change", track2);
+        });
 
         function onEachFeature(feature, layer) {
 
@@ -124,26 +278,86 @@
             container.html("<dt>"+"<b>Date:</b> "+date+"    <b>Time:</b> "+time+"</dt>")
             container.append("<dt>"+"<b>Magnitude:</b> "+magnitude+" Mw"+ "</dt>")
             container.append("<dt>"+"<b>Source depth:</b> "+depth+" km"+ "</dt>")
-            container.append( '<a href='+link1+' onclick="return popup(this,width=1000,height=500)" title="Event Information"><img src="static/thumbnail1.png"  height='+height+' width='+width+'/> </a>');
-            container.append( '<a href='+link2+' onclick="return popup(this,width=1000,height=500)" title="Waveform Comparison"><img src="static/thumbnail2.png"  height='+height+' width='+width+'/> </a>');
-            container.append( "<dt>"+'<a href='+link3+' onclick="return popup(this,width=1000,height=500)" title="Wavespeed Estimation"><img src="static/thumbnail3.png"  height='+height+' width='+width+'/> </a>'+'<a href='+link4+' onclick="return popup(this,width=1000,height=500)" title="P-Coda Evaluation"><img src="static/thumbnail4.png"  height='+height+' width='+width+'/> </a>'+"</dt>");
+            container.append( '<a href='+link1+' onclick="return popup(this,width=1000,height=500)" title="Event Information"><img src="static/images/thumbnail1.png"  height='+height+' width='+width+'/> </a>');
+            container.append( '<a href='+link2+' onclick="return popup(this,width=1000,height=500)" title="Waveform Comparison"><img src="static/images/thumbnail2.png"  height='+height+' width='+width+'/> </a>');
+            container.append( "<dt>"+'<a href='+link3+' onclick="return popup(this,width=1000,height=500)" title="Wavespeed Estimation"><img src="static/images/thumbnail3.png"  height='+height+' width='+width+'/> </a>'+'<a href='+link4+' onclick="return popup(this,width=1000,height=500)" title="P-Coda Evaluation"><img src="static/images/thumbnail4.png"  height='+height+' width='+width+'/> </a>'+"</dt>");
             container.append( '<a href='+json+ " target = '_blank'>Seismic Event Info [.json-Format]</a>");
             if (feature.properties.time) {
                 layer.bindPopup(container[0]);
             }
-        }
-        
+        }      
+        // converts quakeml data to read/writable string
+        function xmlToString(xmlData) { 
+            var xmlString;
+            //IE
+            if (window.ActiveXObject){
+                xmlString = xmlData.xml;
+            }
+            // code for Mozilla, Firefox, Opera, etc.
+            else{
+                xmlString = (new XMLSerializer()).serializeToString(xmlData);
+            }
+            return xmlString;
+        }   
+
+        // creates the downloadable quakeml file as a query
+        var submit_form_xml = function(e) {
+                $.get($SCRIPT_ROOT +'/query', {
+                    start: $('input[name="start"]').val(),
+                    end: $('input[name="end"]').val(),
+                    minmag: $('input[name="minmag"]').val(),
+                    maxmag: $('input[name="maxmag"]').val(),
+                    mindepth: $('input[name="mindepth"]').val(),
+                    maxdepth: $('input[name="maxdepth"]').val(),
+                    minlon: $('input[name="minlon"]').val(),
+                    maxlon: $('input[name="maxlon"]').val(),
+                    minlat: $('input[name="minlat"]').val(),
+                    maxlat: $('input[name="maxlat"]').val(),
+                    lon_circ: $('input[name="lon_circ"]').val(),
+                    lat_circ: $('input[name="lat_circ"]').val(),
+                    circ_dist: $('input[name="circ_dist"]').val(),
+                    mincor: $('input[name="mincor"]').val(),
+                    maxcor: $('input[name="maxcor"]').val(),
+                    minpeakrot: $('input[name="minpeakrot"]').val(),
+                    minSNR: $('input[name="minSNR"]').val(),
+                    format: 'quakeml'
+                }, function(data) {
+                    download(xmlToString(data), "catalog.xml", "text/xml")
+                });
+                return false; // to avoid default behavior aka navigation to '#'
+            };
+        $('a#calculatexml').bind('click', submit_form_xml);
+
+
         $(function() {
             // initialize the map
             var map = L.map('map').setView([0, 5], 1);
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
+                maxZoom: 19,
                 minZoom: 1,
+                maxBounds: [[-180,-90],[180,90]],
                 id: 'salve-.o6ff8adn',
                 accessToken: "pk.eyJ1Ijoic2FsdmUtIiwiYSI6ImNpZ3M0NDF5MzAwNzZ2bmt1bmk5aGU4aG0ifQ.vdmDEhNU-bKA73pZS31_Ag"
             }).addTo(map);
 
+            // Used to set back view!
+            $("#dialog").on("click", ".markerback", function(e) {
+                  e.preventDefault();
+                  map.panTo($(this).attr("value"));  
+            });
+
+
+            //OR:
+
+            // Disable dragging beyond bounds
+            // var bounds = L.latLngBounds([[-100, -360], [100, 360]]);
+            // map.setMaxBounds(bounds);
+            // map.on('drag', function() {
+            //     map.panInsideBounds(bounds, { animate: false });
+            // });
+
+            // map.fitBounds(bounds, {padding: [200,200]})
 
             var station = L.geoJson({
                 "type": "Feature",
@@ -156,7 +370,7 @@
                     "coordinates": [12.875677, 49.144984]
                 }
             })         
-            .addTo(map).bindPopup("<b>Station Wettzell:</b> G-Ring site" + "<br>" +'<img src="static/image_Gring.jpg" height="120" width="200"/>');
+            .addTo(map).bindPopup("<b>Station Wettzell:</b> G-Ring site" + "<br>" +'<img src="static/images/image_Gring.jpg" height="120" width="200"/>');
             
             L.control.mousePosition().addTo(map);
             var markers
@@ -167,10 +381,20 @@
                     end: $('input[name="end"]').val(),
                     minmag: $('input[name="minmag"]').val(),
                     maxmag: $('input[name="maxmag"]').val(),
+                    mindepth: $('input[name="mindepth"]').val(),
+                    maxdepth: $('input[name="maxdepth"]').val(),
                     minlon: $('input[name="minlon"]').val(),
                     maxlon: $('input[name="maxlon"]').val(),
                     minlat: $('input[name="minlat"]').val(),
-                    maxlat: $('input[name="maxlat"]').val()
+                    maxlat: $('input[name="maxlat"]').val(),
+                    lon_circ: $('input[name="lon_circ"]').val(),
+                    lat_circ: $('input[name="lat_circ"]').val(),
+                    circ_dist: $('input[name="circ_dist"]').val(),
+                    mincor: $('input[name="mincor"]').val(),
+                    maxcor: $('input[name="maxcor"]').val(),
+                    minpeakrot: $('input[name="minpeakrot"]').val(),
+                    minSNR: $('input[name="minSNR"]').val(),
+                    format: 'map'
                 }, function(data) {
                     // window.alert(JSON.stringify(data.features[0])) //"Zero events for the specified parameter range!")
                     if (typeof data.features[0] === 'undefined') {
@@ -181,11 +405,11 @@
                           confirmButtonText: "Ok"
                         });
                     }
-                    else {
+                    else if (data.features.length < 2500) {
                         swal({timer :2000, closeOnConfirm:false, showConfirmButton:false,
                           title: "Found " + data.features.length + " event(s) in database!",
                           type: "success",
-                          // confirmButtonText: "Ok"
+                          // confirmButtonText: "Ok" .features.length
                         });
                         markers.clearLayers(); // so markers for each new search are not plotted ontop of the old ones
                         var marker = L.geoJson(data, {onEachFeature: onEachFeature,
@@ -211,6 +435,14 @@
                                 return L.circleMarker(latlng, geojsonMarkerOptions);
                             }
                         }).addTo(markers);
+                    }
+                    else {
+                        swal({
+                          title: "Error!",
+                          text: "Found 0 events in database for the specified parameter range! Please reconfine!",
+                          type: "error",
+                          confirmButtonText: "Ok"
+                        });  
                     };
                     // $('input[name="start"]').focus().select();
                 });
@@ -225,37 +457,6 @@
             });
             // $('input[name="start"]').focus();
         });
-    </script>
-  
-  
-    <br>
-    <center>
-        <table style=" margin-right:0px" border="1" frame="hsides">
-            <tr>
-                <td bgcolor="#FFFF99" width="110px" align="center"> <font size="1">d &lt 10km</font></td>
-                <td bgcolor="#FFCC99" width="110px" align="center"> <font size="1">10km &lt d &lt 30km </font></td>
-                <td bgcolor="#FF0000" width="110px" align="center"> <font size="1"> 30km &lt d &lt 100km </font></td>
-                <td bgcolor="#33CC66" width="110px" align="center"> <font size="1">100km &lt d &lt 200km</font></td>
-                <td bgcolor="#0099FF" width="110px" align="center"> <font size="1">d &gt 200km</font></td>
-            </tr>
-        </table>
-    </center>
-    <center>
-        <span style="padding-right:0px">
-        <font size="2"><b>color codes depth</b></font><br>
-        <img src="static/magnitude_table.png"/><br>
-        <font size="2"><b>size codes magnitude</b></font>
-    </center>
-  </tr>
-  </table>
-  </center>
-  </td>
-    <tr>
-      <td bgcolor="#f2f2f2" border="0" colspan="2" align="right">
-        <font size="2" color="grey"><b>contact:</b> jsalvermoser@geophysik.uni-muenchen.de<br>Copyright &copy Johannes Salvermoser 2016</font>
-      </td>
-    </tr>
-<table>
-</center>
+</script>
 {% endblock content %}
 

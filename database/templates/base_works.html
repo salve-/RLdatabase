@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- <link rel="stylesheet" href="static/style.css"> -->
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+  	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  	<script src="http://code.jquery.com/jquery-1.4.min.js" type="text/javascript"></script>
+  	<script type=text/javascript>
+  		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+	</script>
+    <script src="static/sweetalert-master/dist/sweetalert.min.js"></script>
+    <script src="static/popupwindow.js"></script>
+    <script src="static/L.Control.MousePosition.js"></script>
+    <script src="static/pace.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/sweetalert-master/dist/sweetalert.css">
+    <link rel="stylesheet" type="text/css" href="static/pace.css">
+    <link rel="stylesheet" type="text/css" href="static/button.css">
+    <link rel="stylesheet" type="text/css" href="static/L.Control.MousePosition.css">
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script> -->
+    <!-- date picker from http://keith-wood.name/datepick.HTML-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/jquery_datepick/jquery.datepick.css"> 
+    <script type="text/javascript" src="static/jquery_datepick/jquery.plugin.js"></script> 
+    <script type="text/javascript" src="static/jquery_datepick/jquery.datepick.js"></script>
+
+    <!-- slider from http://www.jqueryrain.com/?jpubA5it-->
+    <!--<script src="https://code.jquery.com/jquery-2.1.1.js"></script>-->
+    <script src="static/jquery-ui-1.12.0.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" href="static/scale-slider.css">
+    <link rel="stylesheet" href="static/jquery-ui-slider.pips.css">
+    <script type="text/javascript" src="static/jquery-ui-slider.pips.js"></script>
+
+
+    <title>RL Event Database</title>
+    <style>
+    	#map{ height: 372px ; }
+    	#map{ width: 700px; };
+
+  	</style>
+    <STYLE TYPE="text/css">
+    BODY
+       {
+       topmargin:0;
+       bottommargin:0;
+       leftmargin:0;
+       rightmargin:0;
+       marginheight:0;
+       marginwidth:2;
+       color:black;
+       font-family:sans-serif;
+       }
+    a:link
+      {
+        color: #1ab0ff;
+        text-decoration: none;
+      }
+    /* visited link */
+    a:visited {
+        color: #1ab0ff;
+    }
+    /* mouse over link */
+    a:hover {
+        color: #990000;
+    }
+    /* selected link */
+    a:active {
+        color: #1ab0ff;
+    }
+    div#map { margin: 0 auto 0 auto; }
+    </STYLE>
+</head>
+<body>
+{% block content %}
+    <p>Default content to be displayed</p>
+{% endblock content %}  	
+</body>
+</html>

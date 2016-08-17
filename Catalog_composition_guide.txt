@@ -1,23 +1,25 @@
 ###
 This guide helps fetching all events when reprocessing them from zero.
 ###
-
+ssh holodeck
+ssh buserror
+cd /import/two-data/salvermoser/waveformCompare
 
 General events: use --mode fdsn
 
 Special periods: 
 1) flipped polarity: 
    need to multiply RLAS or AC with (-1) to get rid of it (don't know where its coming from).
-   - 2007-09-14 - 2007-09-25
-   - 2007-12-16 - 2007-12-26T23:00
-   - 2008-02-21 - 2008-03-15
-   - 2008-05-07 - 2008-06-10
+   x--min_datetime 2007-09-10T00:00  --max_datetime 2007-09-25T23:59 --mode fdsn
+   x--min_datetime 2007-12-16T00:00  --max_datetime 2007-12-26T23:00 --mode fdsn
+   x--min_datetime 2008-02-21T00:00  --max_datetime 2008-03-15T23:59 --mode fdsn
+   x--min_datetime 2008-05-07T00:00  --max_datetime 2008-06-10T23:59 --mode fdsn
 
 2) Additional events from other catalogs:
    events from Poland and other close events that do not appear in the GCMT catalog.
-   Use .xml files! --> --mode qmlfile
+   Use .xml files! --> --min_datetime 2007-07-18T00:00 --mode qmlfile
    But reduce the shift len from 100 to 50!
-   - preferred: use extra_events.xml which contains all the events of the other xml-files --> may not work 210 is not enough
+   x- preferred: use extra_events.xml which contains all the events of the other xml-files --> may not work 210 is not enough
    (- for the France event 2016-04-28: france_event_20160428.xml
     - for Poland events: poland_events_qml.xml
     - for other larger closeby events: 500kmradius_events_qml.xml)
@@ -26,6 +28,29 @@ Special periods:
    Use the other seismometer 'Lennartz' which is less sensitive, but uses the same GPS as G-ring.
    Change net_s to 'BW', sta_s to 'WETR'
    Estimated periods:
-   - 2014-05-01 - 2014-11-15
-   - 2013-07-10 - 2013-09-01
-   - 2012-03-15 - 2012-05-05
+   x--min_datetime 2014-05-01T00:00 --max_datetime 2014-11-15T23:59 --mode fdsn
+   x--min_datetime 2013-07-10T00:00 --max_datetime 2013-09-01T23:59 --mode fdsn
+   x--min_datetime 2012-03-15T00:00 --max_datetime 2012-05-05T23:59 --mode fdsn
+
+4) Normal script for:
+	note: for 2007 and 2008 activate polarity check!
+	x--min_datetime 2007-07-18T00:00  --max_datetime 2007-09-13T23:59 --mode fdsn
+	x--min_datetime 2007-09-26T00:00  --max_datetime 2007-12-15T23:59 --mode fdsn
+	x--min_datetime 2007-12-26T23:00  --max_datetime 2008-02-20T23:59 --mode fdsn
+	x--min_datetime 2008-03-16T00:00  --max_datetime 2008-05-06T23:59 --mode fdsn
+	x--min_datetime 2008-06-10T00:00  --max_datetime 2008-12-31T23:59 --mode fdsn
+	x--min_datetime 2009-01-01T00:00  --max_datetime 2009-06-30T23:59 --mode fdsn
+	x--min_datetime 2009-07-01T00:00  --max_datetime 2009-12-31T23:59 --mode fdsn
+	x--min_datetime 2010-01-01T00:00  --max_datetime 2010-06-30T23:59 --mode fdsn
+	x--min_datetime 2010-07-01T00:00  --max_datetime 2010-12-31T23:59 --mode fdsn
+	x--min_datetime 2011-01-01T00:00  --max_datetime 2011-06-30T23:59 --mode fdsn
+	x--min_datetime 2011-07-01T00:00  --max_datetime 2011-12-31T23:59 --mode fdsn
+	x--min_datetime 2012-01-01T00:00  --max_datetime 2012-03-14T23:59 --mode fdsn
+	x--min_datetime 2012-05-06T00:00  --max_datetime 2012-12-31T23:59 --mode fdsn
+	x--min_datetime 2013-01-01T00:00  --max_datetime 2013-07-09T23:59 --mode fdsn
+	x--min_datetime 2013-09-02T00:00  --max_datetime 2013-12-31T23:59 --mode fdsn
+	x--min_datetime 2014-01-01T00:00  --max_datetime 2014-04-30T23:59 --mode fdsn
+	x--min_datetime 2014-11-16T00:00  --max_datetime 2014-12-31T23:59 --mode fdsn
+	x--min_datetime 2015-01-01T00:00  --max_datetime 2015-06-30T23:59 --mode fdsn
+	x--min_datetime 2015-07-01T00:00  --max_datetime 2015-12-31T23:59 --mode fdsn
+	x--min_datetime 2016-01-01T00:00  --max_datetime 2016-08-02T23:59 --mode fdsn

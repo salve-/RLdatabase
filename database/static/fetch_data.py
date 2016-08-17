@@ -3,15 +3,15 @@
 
 from obspy.core import UTCDateTime
 from obspy.core.stream import Stream
-from obspy.clients.arclink.client import Client as arclinkClient
+from obspy.clients.fdsn import Client as fdsnClient
 import numpy as np
 import matplotlib.pyplot as plt
 
 ############################### FUNCTIONS  ##################################
 
 # function that fetches the data streams
-def fetch_data(net,sta,chan,start,end):
-	c = arclinkClient(user='test@obspy.org')
+def fetch_data(net,sta,chan,start,end,source):
+	c = fdsnClient(source)
 	st = c.get_waveforms(network=net, station=sta, location='', channel=chan,
                          starttime=start, endtime=end)
 	return st
@@ -66,12 +66,12 @@ starttime = UTCDateTime("2011-03-11 05:46:00")
 endtime = starttime + 3600
 
 # fetch Wettzell Ring laser data
-RLAS = fetch_data('BW','RLAS', 'BJZ', starttime, endtime)  # Vertical rotation rate
+RLAS = fetch_data('BW','RLAS', 'BJZ', starttime, endtime, 'LMU')  # Vertical rotation rate
 
 # fetch Wettzell Broadband seismometer data (3 components, ground velocity)
-BHE = fetch_data("GR","WET", "BHE", starttime, endtime)  # East
-BHN = fetch_data("GR","WET", "BHN", starttime, endtime)  # North
-BHZ = fetch_data("GR","WET", "BHZ", starttime, endtime)  # Vertical
+BHE = fetch_data("GR","WET", "BHE", starttime, endtime, 'BGR')  # East
+BHN = fetch_data("GR","WET", "BHN", starttime, endtime, 'BGR')  # North
+BHZ = fetch_data("GR","WET", "BHZ", starttime, endtime, 'BGR')  # Vertical
 
 # make a stream for simplification
 AC = Stream(traces=[BHE[0],BHN[0],BHZ[0]])
