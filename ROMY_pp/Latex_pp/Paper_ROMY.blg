@@ -3,44 +3,49 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: Paper_ROMY.aux
 The style file: apalike.bst
 Database file #1: Bibliography_ROMY.bib.bib
-You've used 19 entries,
+Repeated entry---line 447 of file Bibliography_ROMY.bib.bib
+ : @article{Pham2009
+ :                  ,
+I'm skipping whatever remains of this entry
+You've used 20 entries,
             1935 wiz_defined-function locations,
-            697 strings with 8726 characters,
-and the built_in function-call counts, 8589 in all, are:
-= -- 795
-> -- 501
-< -- 4
-+ -- 185
-- -- 178
-* -- 824
-:= -- 1546
-add.period$ -- 61
-call.type$ -- 19
-change.case$ -- 183
-chr.to.int$ -- 18
-cite$ -- 19
-duplicate$ -- 261
-empty$ -- 513
-format.name$ -- 203
-if$ -- 1609
+            699 strings with 8949 characters,
+and the built_in function-call counts, 8957 in all, are:
+= -- 829
+> -- 519
+< -- 5
++ -- 191
+- -- 184
+* -- 857
+:= -- 1614
+add.period$ -- 63
+call.type$ -- 20
+change.case$ -- 191
+chr.to.int$ -- 19
+cite$ -- 20
+duplicate$ -- 271
+empty$ -- 536
+format.name$ -- 212
+if$ -- 1681
 int.to.chr$ -- 2
 int.to.str$ -- 0
 missing$ -- 20
-newline$ -- 102
-num.names$ -- 57
-pop$ -- 143
+newline$ -- 106
+num.names$ -- 60
+pop$ -- 148
 preamble$ -- 1
-purify$ -- 184
+purify$ -- 192
 quote$ -- 0
-skip$ -- 198
+skip$ -- 206
 stack$ -- 0
-substring$ -- 519
+substring$ -- 548
 swap$ -- 19
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 112
+type$ -- 118
 warning$ -- 0
-while$ -- 57
+while$ -- 59
 width$ -- 0
-write$ -- 256
+write$ -- 266
+(There was 1 error message)

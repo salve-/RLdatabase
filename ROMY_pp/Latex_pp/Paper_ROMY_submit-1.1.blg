@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Paper_ROMY_submit-1.1.aux
+The style file: apalike.bst
+I found no \bibdata command---while reading file Paper_ROMY_submit-1.1.aux
+Warning--I didn't find a database entry for "Stedman1997"
+Warning--I didn't find a database entry for "Schreiber2013"
+Warning--I didn't find a database entry for "AkiRichards2002"
+Warning--I didn't find a database entry for "McLeod1998"
+Warning--I didn't find a database entry for "Pancha2000"
+Warning--I didn't find a database entry for "Igel2005"
+Warning--I didn't find a database entry for "Igel2007"
+Warning--I didn't find a database entry for "Kurrle2010"
+Warning--I didn't find a database entry for "Perez2007"
+Warning--I didn't find a database entry for "Megies2011"
+Warning--I didn't find a database entry for "Krischer2015"
+Warning--I didn't find a database entry for "Igel2011"
+Warning--I didn't find a database entry for "Hadziioannou2012"
+Warning--I didn't find a database entry for "Dziewonski1981"
+Warning--I didn't find a database entry for "Ekstroem2012"
+Warning--I didn't find a database entry for "Crotwell1999"
+Warning--I didn't find a database entry for "Kennett1991"
+Warning--I didn't find a database entry for "Pham2009"
+Warning--I didn't find a database entry for "Bernauer2016"
+Warning--I didn't find a database entry for "Schreiber2003b"
+Warning--I didn't find a database entry for "Ortolan2016"
+Warning--I didn't find a database entry for "Schreiber2003"
+You've used 0 entries,
+            1935 wiz_defined-function locations,
+            514 strings with 4188 characters,
+and the built_in function-call counts, 17 in all, are:
+= -- 0
+> -- 0
+< -- 0
++ -- 0
+- -- 0
+* -- 0
+:= -- 7
+add.period$ -- 0
+call.type$ -- 0
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 0
+duplicate$ -- 0
+empty$ -- 1
+format.name$ -- 0
+if$ -- 1
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 3
+num.names$ -- 0
+pop$ -- 0
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1
+stack$ -- 0
+substring$ -- 0
+swap$ -- 0
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 0
+width$ -- 0
+write$ -- 2
+(There was 1 error message)
