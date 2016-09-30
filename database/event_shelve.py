@@ -170,7 +170,7 @@ class EventShelve(object):
               mindepth=None, maxdepth=None, minmagnitude=None,
               maxmagnitude=None, mincor=None, maxcor=None, minpeakrot=None, minSNR=None, 
               limit=None, offset=1, orderby="time", event_id=None, lat_circ=None, 
-              lon_circ=None, circ_dist=None, query_id=None,format=None, **kwargs):
+              lon_circ=None, circ_dist=None, query_id=None,format='quakeml', **kwargs):
         """
         FDSN event service like queries.
         """
@@ -179,10 +179,15 @@ class EventShelve(object):
 
         found_events = {}
         liste=[]
-
         # Find all events according to the query.
         for filename, event in self.events.iteritems():
+            if lon_circ == None: # need to set default values for lat lon here to calculate dist
+                lon_circ = 12.88
+            if lat_circ == None:
+                lat_circ = 49.15
             dist = locations2degrees_single(lat_circ, lon_circ, event["latitude"], event["longitude"])
+            # if format == None: #set default to quakeml to make the fdsn service work!
+            #     format='quakeml'
             if (event_id is None or event["event_id"] == event_id) and \
                     (starttime is None or event["time"] >= starttime) and \
                     (endtime is None or event["time"] <= endtime) and \

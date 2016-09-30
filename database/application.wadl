@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" standalone="yes"?>
 <application xmlns="http://wadl.dev.java.net/2009/02">
    <doc title="FDSN event web service 1.0"/>
-   <resources base="localhost/event">
+   <resources base="http://ec2-54-93-53-183.eu-central-1.compute.amazonaws.com:8000/fdsnws/event/1/">
       <resource path="/">
          <method id="index" name="GET">
             <response>
@@ -38,81 +38,38 @@
                   <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="maxmagnitude" style="query" type="xs:double">
                      <doc xml:lang="english" title="Limit to events with a magnitude smaller than or equal to the specified maximum"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="magnitudetype" style="query" type="xs:string">
-                     <doc xml:lang="english" title="type of Magnitude used to test minimum and maximum limits (case insensitive)">
-                     Examples: Ml,Ms,mb,Mw"</doc>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="catalog" style="query" type="xs:string" default="NEIC+PDE">
-                     <doc xml:lang="english" title="Specify the catalog from which origins and magnitudes will be retrieved"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="contributor" style="query" type="xs:string">
-                     <doc xml:lang="english" title="Limit to events contributed by a specified contributor"/>
-                  </param>
                   <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="maxdepth" style="query" type="xs:double">
                      <doc xml:lang="english" title="Limit to events with depths equal to or less than the specified depth"/>
                   </param>
                   <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mindepth" style="query" type="xs:double">
                      <doc xml:lang="english" title="Limit to events with depths equal to or greater than the specified depth"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="query" type="xs:double" default="0.0">
-                     <doc xml:lang="english" title="Specify the central latitude point for a radial search"/>
+                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="mincor" style="query" type="xs:double" default="0.0">
+                     <doc xml:lang="english" title="Limit the minimum value of the maximum correlation coefficient for an event"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="query" type="xs:double" default="0.0">
-                     <doc xml:lang="english" title="Specify the central longitude point for a radial search"/>
+                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="maxcor" style="query" type="xs:double" default="1.0">
+                     <doc xml:lang="english" title="Limit the maximum value of the maximum correlation coefficient for an event"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="maxradius" style="query" type="xs:double" default="180.0">
-                     <doc xml:lang="english" title="Specify maximum distance from the geographic point defined by latitude and longitude"/>
+                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="minpeakrot" style="query" type="xs:double" default="0.0">
+                     <doc xml:lang="english" title="Specify minimum value of peak rotation rate for an event"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="minradius" style="query" type="xs:double" default="0.0">
-                     <doc xml:lang="english" title="Specify minimum distance from the geographic point defined by latitude and longitude"/>
+                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="minSNR" style="query" type="xs:double" default="0.0">
+                     <doc xml:lang="english" title="Specify minimum rotation rate signal-to-noise ratio for an event"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="orderby" style="query" type="xs:string" default="time">
-                     <doc xml:lang="english" title="Specify the ordering of the returned results"/>
-                     <option value="time">
-                        <doc xml:lang="english" title="Sort by time, descending"/>
-                     </option>
-                     <option value="magnitude">
-                        <doc xml:lang="english" title="Sort by magnitude, descending"/>
-                     </option>
-                     <option value="time-asc">
-                        <doc xml:lang="english" title="Sort by time, ascending"/>
-                     </option>
-                     <option value="magnitude-asc">
-                        <doc xml:lang="english" title="Sort by magnitude, ascending"/>
-                     </option>
+                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string" default="quakeml">
+                     <doc xml:lang="english" title="Specify output format"/>
+                     <option value="quakeml" mediaType="application/xml"/>
+                     <option value="text" mediaType="text/plain"/>
                   </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="updatedafter" style="query" type="xs:date">
-                     <doc xml:lang="english" title="Limit to events updated after the specified time"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="eventid" style="query" type="xs:long">
-                     <doc xml:lang="english" title="Retrieve an event based on the unique ID numbers assigned by the IRIS DMC"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="includearrivals" style="query" type="xs:boolean" default="false">
-                     <doc xml:lang="english" title="Specify if phase arrivals should be included"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="includeallmagnitudes" style="query" type="xs:boolean" default="false">
-                     <doc xml:lang="english" title="Retrieve all magnitudes for the event, or only the primary magnitude from within the catalog"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="includeallorigins" style="query" type="xs:boolean" default="false">
-                     <doc xml:lang="english" title="Retrieve all origins or only the primary origin associated with each event in a catalog"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="limit" style="query" type="xs:int">
-                     <doc xml:lang="english" title="Limit the results to the specified number of events"/>
-                  </param>
-                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="offset" style="query" type="xs:int" default="1">
-                     <doc xml:lang="english" title="Return results starting at the event count specified"/>
+                  <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nodata" style="query" type="xs:int" default="204">
+                     <doc xml:lang="english" title="Specify which HTML Status code is returned when no data is found"/>
+                     <option value="204"/>
+                     <option value="404"/>
                   </param>
                </request>
                <response>
                   <representation mediaType="text/plain"/>
                   <representation mediaType="application/xml"/>
-               </response>
-            </method>
-         </resource>
-         <resource path="/version">
-            <method id="version" name="GET">
-               <response>
-                  <representation mediaType="text/plain"/>
                </response>
             </method>
          </resource>

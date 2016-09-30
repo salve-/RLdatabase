@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import flask
-from flask import render_template,request, redirect, url_for, jsonify
+from flask import render_template,request, redirect, url_for, jsonify, Response
 from flask_flatpages import FlatPages
 from flask.ext.cache import Cache
 from flask_frozen import Freezer
@@ -88,10 +88,6 @@ def index():
     return render_template('index.html', pages=pages, form=form)
 
 
-# @app.route('/welcome')
-# def welcome():
-#     return render_template('welcome.html')
-
 # @app.route('/files')
 # def show_files():
 
@@ -115,7 +111,7 @@ def version():
     return "0.0.1"
 
 
-@app.route(ROOT_URL + "application.wadl")
+@app.route(ROOT_URL + "fdsnws/event/1/application.wadl")
 @cache.cached()
 def wadl():
     """
@@ -123,10 +119,10 @@ def wadl():
     """
     with open(os.path.join(PATH, "application.wadl"), "rb") as fh:
         wadl_string = fh.read()
-    return wadl_string
+    return Response(wadl_string, mimetype='text/xml')
 
 
-@app.route("/query", methods=['GET', 'POST'])
+@app.route("/fdsnws/event/1/query", methods=['GET', 'POST'])
 def query():
     """
     The actual query route.
@@ -171,6 +167,8 @@ def query():
     arguments["query_id"] = flask.request.base_url
 
     try:
+        if "format" not in arguments:
+            arguments["format"] = "quakeml"
         cat = event_shelve.query(**arguments)
     except Exception as e:
         return str(e), 500, {}
