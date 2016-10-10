@@ -75,18 +75,33 @@ Troubleshooting:
    removes incomplete folders right away. But if the code is interrupted, this might happen.
    SOLUTION: Delete these event-folders and recalculate the events!
 
-4) 
+4) Server complains about flask --> does not start at all:
+ - Install the following Python(-flask) packages:
+  - Python 2.7
+  - Flask
+  - Flask-Cache
+  - Obspy in a recent version
+  
+  e.g. on a UNIX system with pip:
+
+  $ pip install flask flask-cache
+  $ pip install obspy
 
 
+Limitations:
 
+DO NOT OPEN THE SERVER TO THE PUBLIC - zero effort has been put into security!
 
+Only one event per QuakeML file is allowed. This is only to simplify the implementation. During indexing it will warn you if it cannot read a file due to this or other issues.
+
+The following query parameters are silently ignored: latitude, longitude, minradius, maxradius (these four are used for radial search queries which could be implemented pretty easily if desired - minlatitude and consorts work fine), magnitudetype, catalog, contributor, updatedafter, and include*.
+
+The database is only updated upon starting the server. So every time your data set changes you will need to restart the server (the indexes are persistent so restarting is fairly cheap). You can do this via cronjob if you want automatic updates (see "CRONTAB_waveformCompare.txt" for example).
+Open crontab: $ crontab -e
+Of course you will have to change the paths!
 
 
 If you are completely desperate, contact me: salv_johannes@gmx.de
-
-
-
-
 
 
 
