@@ -49,9 +49,28 @@ waveformCompare (main-folder)
 		- OUTPUT (folder, contains all the processed event folders incl. each: 4 images, xml-file, json-file)
 		- sweetalert_master (folder, webpage-alerts, css and javascript files)
 
-Troubleshooting:
+Troubleshooting/ Preparation:
 
-1) No more updates on server:
+1) Server complains about flask --> does not start at all: 
+ 1st step: set public-variable to "False" in config.py which turns on the debug mode! 
+ Then, install the following Python(-flask) packages and keep restarting the server:
+  - Python 2.7 or newer (3.4 works)
+  - Flask
+  - Flask-Cache
+  - Flask-FlatPages
+  - WTForms
+  - python geojson
+  - Obspy in a recent version
+  
+  e.g. on a UNIX system with pip:
+
+  $ pip install flask flask-cache
+  $ pip install Flask-FlatPages
+  $ pip install WTForms
+  $ pip install geojson
+  $ pip install obspy
+
+2) No more updates on server:
  - Does the cronjob still work properly? If it was deleted because of a system update or change of machine, you'll have to   
    reinstall it. For this just copy the CRONTAB_waveformCompare.txt into the "crontab -e"-shell prompt. CAUTION: You may have 
    to change the paths!
@@ -59,7 +78,7 @@ Troubleshooting:
    your bug! 
 
 
-2) Webpage is not visible, shows artifacts or cannot be accessed at all:
+3) Webpage is not visible, shows artifacts or cannot be accessed at all:
    There could be multiple reasons:
  - Does the Browser still support all of the javascript/jquery functions or html-methods? -> solve by replacing them.
  - Did you mess with the index.html, base.html, server.py, or event_shelve.py? -> If so try to change them back or use a   
@@ -69,23 +88,11 @@ Troubleshooting:
    index.html, the map will be the first to crash even if it's not related to that problem.
 
 
-3) Event contents seem mixed up/ events plotted on wrong locations on map/ contents missing:
+4) Event contents seem mixed up/ events plotted on wrong locations on map/ contents missing:
  - Check the OUTPUT folder! Maybe something went wrong with the event calculation. In this case you should find
    event folders that contain less than 6 files (4 images, .xml, .json). This should not happen since the waveformCompare-code
    removes incomplete folders right away. But if the code is interrupted, this might happen.
    SOLUTION: Delete these event-folders and recalculate the events!
-
-4) Server complains about flask --> does not start at all:
- - Install the following Python(-flask) packages:
-  - Python 2.7
-  - Flask
-  - Flask-Cache
-  - Obspy in a recent version
-  
-  e.g. on a UNIX system with pip:
-
-  $ pip install flask flask-cache
-  $ pip install obspy
 
 
 Limitations:

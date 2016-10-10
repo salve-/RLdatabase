@@ -5,8 +5,7 @@ import flask
 from flask import render_template,request, redirect, url_for, jsonify, Response
 from flask_flatpages import FlatPages
 from flask.ext.cache import Cache
-from flask_frozen import Freezer
-from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from wtforms import Form, TextField, validators
 
 
 import inspect
@@ -31,7 +30,6 @@ PATH = os.path.dirname(os.path.abspath(inspect.getfile(
 app = flask.Flask("FDSNEventService")
 cache = Cache(app, config={"CACHE_TYPE": "simple"})
 pages = FlatPages(app)
-freezer = Freezer(app)
 
 print("Initializing event shelve...")
 # Init the event shelve.
@@ -86,10 +84,6 @@ def index():
         MinSNR = form.minSNR.data
         Format = form.format.data
     return render_template('index.html', pages=pages, form=form)
-
-
-# @app.route('/files')
-# def show_files():
 
 @app.route('/<path:path>/')
 def page(path):
