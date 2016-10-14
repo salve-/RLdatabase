@@ -1,8 +1,10 @@
-#############################################
-#  ***************************************  #
-#  * WaveformCompare-DATABASE PROCESSING *  #
-#  ***************************************  #
-#############################################
+
+# WaveformCompare-DATABASE PROCESSING
+
+
+## Workflow
+![alt tag](SL_DB_Flowchart.png)
+
 
 ## List of important files and folders:
 
@@ -30,7 +32,7 @@
     
 	- application.wadl (guide to database http-requests)
 	- config.py (configuration file for the server)
-	- event_db.shelve.[bak,dat,dir] (actual event shelve that contains all the database information)
+	- event_db.shelve."[bak, dat, dir]" (actual event shelve that contains all the database information)
 	- event_shelve.py (functions that create the database-files and handle server-requests)
 	- server.py (flask-server that keeps everything going, handles requests)
 
