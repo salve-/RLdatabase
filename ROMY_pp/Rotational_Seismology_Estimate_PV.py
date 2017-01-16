@@ -105,7 +105,10 @@ sc=ax2.scatter(np.arange(60,sec * len(corrcoefs),sec),corrcoefs,c=corrcoefs,cmap
 ax2.set_xlim(0, RLAS[0].times()[-1])
 ax2.set_ylim(-1,1.2)
 ax2.set_ylabel('\nx-corr coef.')
-ax2.annotate('0.75 threshold', xy=(50,.8),xycoords='data')
+ax2.annotate('0.75 threshold', xy=(50,.86),xycoords='data', bbox=dict(boxstyle="square", pad=0.1,
+                   ec=(.8, .8, 0.8),
+                   fc=(.97, .97, .97),
+                   ))
 ax2.grid(visible=False)
 ax2.spines['bottom'].set_color('k')
 ax2.spines['top'].set_color('k')
@@ -142,9 +145,9 @@ cbar.ax.tick_params(labelsize=9)
 
 
 # add P- and S-wave arrivals 
-ax3.axvline(arriv_p,linewidth=1,c='k');ax.axvline(arriv_p,linewidth=1,c='k')
+ax3.axvline(arriv_p,linewidth=2,c='k');ax.axvline(arriv_p,linewidth=2,c='k')
 ax3.annotate('P-arrival', xy=(arriv_p+20,4.5),xycoords='data');
-ax3.axvline(arriv_s,linewidth=1,c='k');ax.axvline(arriv_s,linewidth=1,c='k')
+ax3.axvline(arriv_s,linewidth=2,c='k');ax.axvline(arriv_s,linewidth=2,c='k')
 ax3.annotate('S-arrival', xy=(arriv_s+20,4.5),xycoords='data');
 ax3.spines['bottom'].set_color('k')
 ax3.spines['top'].set_color('k')
@@ -152,5 +155,6 @@ ax3.spines['left'].set_color('k')
 ax3.spines['right'].set_color('k')
 
 pl.subplots_adjust(bottom=0.2,left=0.1,right=0.88, wspace=0.3)
-plt.show()
+# plt.show()
+plt.savefig('Phase_vel_estimation.eps', format='eps')
 

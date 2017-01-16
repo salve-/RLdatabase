@@ -16,6 +16,7 @@ import matplotlib.lines as mlines
 from pylab import Rectangle
 import os
 from obspy import read
+from obspy import read, read_events
 
 
 
@@ -50,8 +51,7 @@ def download_data(net,sta,chan,origin_time):
   return st
 
 
-c_fdsn = fdsnClient('IRIS')
-cat = c_fdsn.get_events(minmagnitude=7.0, starttime=UTCDateTime(2011,10,23), endtime=UTCDateTime(2011,10,24), catalog='GCMT')
+cat = read_events('xml_Turkey.xml')
 event = cat[0]
 print(cat)
 print(event.event_descriptions[0]['type'], ': ',event.event_descriptions[0]['text'])
@@ -61,16 +61,12 @@ print(event.event_descriptions[0]['type'], ': ',event.event_descriptions[0]['tex
 start=event.origins[0].time
 print('Origin time: ', start)
 
+AC = read('acc_Turkey_preproc.mseed')
+RLAS = read('rot_Turkey_preproc.mseed')
+cat = read_events('xml_Turkey.xml')
 
-
-BHE = download_data(net='GR', sta='WET', chan='BHE', origin_time=start)
-BHN = download_data(net='GR', sta='WET', chan='BHN', origin_time=start)
-BHZ = download_data(net='GR', sta='WET', chan='BHZ', origin_time=start)
-
-AC = Stream(traces=[BHE[0],BHN[0],BHZ[0]])
 ac = AC.copy()
-print('ok')
-RLAS = download_data(net='BW', sta='RLAS', chan='BJZ', origin_time=start)
+
 
 
 
@@ -81,39 +77,39 @@ RLAS = download_data(net='BW', sta='RLAS', chan='BJZ', origin_time=start)
 
 # In[3]:
 
-RLAS.detrend(type='linear')
-RLAS[0].data = RLAS[0].data * 1/6.3191 * 1e-3
+# RLAS.detrend(type='linear')
+# RLAS[0].data = RLAS[0].data * 1/6.3191 * 1e-3
 
-AC.detrend(type='linear')
-AC.taper(max_percentage=0.05)
-
-
-paz_sts2 = {'poles': [(-0.0367429 + 0.036754j), (-0.0367429 - 0.036754j)],
-            'sensitivity': 0.944019640,
-            'zeros': [0j],
-            'gain': 1.0}
-
-AC.simulate(paz_remove=paz_sts2, remove_sensitivity=True)
-
-startaim = max([tr.stats.starttime for tr in (AC + RLAS)])
-endtaim = min([tr.stats.endtime for tr in (AC + RLAS)])
-
-AC.trim(startaim, endtaim, nearest_sample=True)
-RLAS.trim(startaim, endtaim, nearest_sample=True)
+# AC.detrend(type='linear')
+# AC.taper(max_percentage=0.05)
 
 
-# **Resample, Filter and Rotate**
+# paz_sts2 = {'poles': [(-0.0367429 + 0.036754j), (-0.0367429 - 0.036754j)],
+#             'sensitivity': 0.944019640,
+#             'zeros': [0j],
+#             'gain': 1.0}
 
-# In[4]:
+# AC.simulate(paz_remove=paz_sts2, remove_sensitivity=True)
+
+# startaim = max([tr.stats.starttime for tr in (AC + RLAS)])
+# endtaim = min([tr.stats.endtime for tr in (AC + RLAS)])
+
+# AC.trim(startaim, endtaim, nearest_sample=True)
+# RLAS.trim(startaim, endtaim, nearest_sample=True)
+
+
+# # **Resample, Filter and Rotate**
+
+# # In[4]:
 
 
 
-RLAS.decimate(factor=4)
-AC.decimate(factor=4)
-f_cutoff = 1.0
+# RLAS.decimate(factor=4)
+# AC.decimate(factor=4)
+# f_cutoff = 1.0
 
-RLAS.filter('lowpass', freq=f_cutoff, corners=2, zerophase=True)
-AC.filter('lowpass', freq=f_cutoff, corners=2, zerophase=True)
+# RLAS.filter('lowpass', freq=f_cutoff, corners=2, zerophase=True)
+# AC.filter('lowpass', freq=f_cutoff, corners=2, zerophase=True)
 
 # event location from event info
 source_latitude = event.origins[0].latitude
@@ -334,7 +330,7 @@ baz.set_xlim(0, time[-1])
 baz.set_ylim(0, 360)
 baz.set_ylabel(u'est.\nBAz [°]', fontsize=10)
 baz.set_xlabel('time [s]', fontsize=10)
-baz.text(2600, 106, u'EBAz=104° | TBAz='+str(round(teobaz,2))+'°', color='k',fontsize=8,backgroundcolor='.9')#fontweight='bold') #
+baz.text(2600, 106, u'EBAz=104° | TBAz='+str(round(teobaz,2))+u'°', color='k',fontsize=8,backgroundcolor='0.9')#fontweight='bold') #
 baz.text(-550, 106, 'c', color='k',fontsize=12, fontweight='bold')
 baz.spines['bottom'].set_color('k')
 baz.spines['top'].set_color('k')
@@ -349,5 +345,5 @@ cb1.set_label(u'X-CC', fontsize=10)
 cb1.set_ticks([-1,0,1])
 plt.subplots_adjust(hspace = .5, wspace=0.5)
 #plt.tight_layout()
-
+#plt.show()
 plt.savefig('Backazimuth_estimation.eps', format='eps')
